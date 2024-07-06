@@ -1,0 +1,41 @@
+Language: Cpp
+
+BasedOnStyle: Google
+
+AccessModifierOffset: -4
+
+IndentWidth: 4
+
+AllowShortCaseLabelsOnASingleLine: true
+
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+  AcrossComments: true
+  AcrossEmptyLines: true
+  AlignCaseColons: true
+
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  AlignCompound: true
+
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: false
+  AlignCompound: true
+
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 10
+
+AlignAfterOpenBracket: true
+
+AllowShortBlocksOnASingleLine: Always
+
+AllowShortFunctionsOnASingleLine: All
+
+AllowShortIfStatementsOnASingleLine: Always
+
+AllowAllArgumentsOnNextLine: false

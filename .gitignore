@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+# Clang Format
+.clang-format
+MiniPhotoEditor
+cmake-build-debug/
