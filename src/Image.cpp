@@ -12,14 +12,16 @@ void Image::loadBitmap(std::ifstream& source) {
         source >> blue;
         try {
             Pixel newPixel(red, green, blue);
-            bitmap->insertValue(newPixel);
+            bitmap_R->insertValue(newPixel.getPixelChannel(RED));
+            bitmap_G->insertValue(newPixel.getPixelChannel(GREEN));
+            bitmap_B->insertValue(newPixel.getPixelChannel(BLUE));
         } catch (const std::logic_error& e) {
             std::cerr << e.what() << std::endl;
         }
     }
 }
 
-Image::Image(const std::string& input_path, const std::string& path) {
+Image::Image(const std::string& input_path, const std::string& path) : path(path) {
     std::ifstream input;
     input.open(input_path.c_str());
     if (input.is_open()) {
@@ -33,13 +35,16 @@ Image::Image(const std::string& input_path, const std::string& path) {
         output << width << " " << height << std::endl;
         output << channelRange << std::endl;
 
-        bitmap = std::make_shared<Matrix<Pixel>>(height, width);
+        //bitmap = std::make_shared<Matrix<Pixel>>(height, width);
+        bitmap_R = std::make_shared<Matrix<int>>(height, width);
+        bitmap_G = std::make_shared<Matrix<int>>(height, width);
+        bitmap_B = std::make_shared<Matrix<int>>(height, width);
         loadBitmap(input);
 
         for (int i = 0; i < height * width; ++i) {
-            output << (*bitmap)[i].getPixelChannel(PixelChannel::RED) << " ";
-            output << (*bitmap)[i].getPixelChannel(PixelChannel::GREEN) << " ";
-            output << (*bitmap)[i].getPixelChannel(PixelChannel::BLUE)
+            output << (*bitmap_R)[i] << " ";
+            output << (*bitmap_G)[i] << " ";
+            output << (*bitmap_B)[i] << " "
                    << std::endl;
         }
         output.close();
@@ -49,36 +54,18 @@ Image::Image(const std::string& input_path, const std::string& path) {
 }
 
 void Image::save() {
-    output.open("output/prima_prova.ppm");
+    output.open(path.c_str());
     if (output.is_open()) {
         output << type << std::endl;
         output << width << " " << height << std::endl;
         output << channelRange << std::endl;
         for (int i = 0; i < height * width; ++i) {
-            output << (*bitmap)[i].getPixelChannel(PixelChannel::RED) << " ";
-            output << (*bitmap)[i].getPixelChannel(PixelChannel::GREEN) << " ";
-            output << (*bitmap)[i].getPixelChannel(PixelChannel::BLUE)
+            output << (*bitmap_R)[i] << " ";
+            output << (*bitmap_G)[i] << " ";
+            output << (*bitmap_B)[i] << " "
                    << std::endl;
         }
     }
     output.close();
 }
 
-//Return the average color of the image (Arithmetic)
-Pixel Image::getBitmapAverage() const {
-    float red, green, blue;
-    red   = 0;
-    blue  = 0;
-    green = 0;
-    for (int i = 0; i < height * width; ++i) {
-        red   = red + (*bitmap)[i].getPixelChannel(RED);
-        green = green + (*bitmap)[i].getPixelChannel(GREEN);
-        blue  = blue + (*bitmap)[i].getPixelChannel(BLUE);
-    }
-
-    red   /= height * width;
-    green /= height * width;
-    blue  /= height * width;
-    Pixel average(red, green, blue);
-    return average;
-}

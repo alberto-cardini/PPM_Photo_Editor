@@ -17,28 +17,34 @@ public:
     ~Image() { output.close(); };
 
     [[nodiscard]] std::string getType() const { return type; }
-    [[nodiscard]] auto&       getBitmap() const { return bitmap; }
+    [[nodiscard]] auto&       getBitmap_R() const { return bitmap_R; }
+    [[nodiscard]] auto&       getBitmap_G() const { return bitmap_G; }
+    [[nodiscard]] auto&       getBitmap_B() const { return bitmap_B; }
     [[nodiscard]] auto&       getFile() const { return output; }
     [[nodiscard]] int         getHeight() const { return height; }
     [[nodiscard]] int         getWidth() const { return width; }
 
     void                      setHeight(int h) { height = h; }
     void                      setWidth(int w) { width = w; }
-    Pixel                     getBitmapAverage() const;
+    // Pixel                     getBitmapAverage() const;
 
-    void                      save();
+    void save();
 
 private:
-    void                           loadBitmap(std::ifstream& source);
+    void                         loadBitmap(std::ifstream& source);
 
-    std::string                    type;
+    std::string                  type;
+    std::string                  path;
 
-    std::shared_ptr<Matrix<Pixel>> bitmap;
-    std::ofstream                  output;
+    std::shared_ptr<Matrix<int>> bitmap_R;
+    std::shared_ptr<Matrix<int>> bitmap_G;
+    std::shared_ptr<Matrix<int>> bitmap_B;
 
-    int                            height{0};
-    int                            width{0};
-    int                            channelRange{0};
+    std::ofstream                output;
+
+    int                          height{0};
+    int                          width{0};
+    int                          channelRange{0};
 };
 
 #endif  // MINIPHOTOEDITOR_IMAGE_HPP
