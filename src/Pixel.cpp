@@ -9,16 +9,6 @@ Pixel::Pixel(int red, int green, int blue) {
     pixelValueCheck(red, green, blue);
 }
 
-void Pixel::setPixel(const Pixel& src) {
-    R = src.R;
-    B = src.B;
-    G = src.G;
-}
-
-void Pixel::setPixel(int red, int green, int blue) {
-    pixelValueCheck(red, green, blue);
-}
-
 void Pixel::pixelValueCheck(int red, int green, int blue) {
     if ( red <= 255 && red >= 0) R = red;
     else if ( red < 0 ) R = 0;
@@ -40,24 +30,4 @@ int Pixel::getPixelChannel(PixelChannel channel) const {
         case PixelChannel::GREEN: return G;
         default                 : return R;
     }
-}
-
-Pixel& Pixel::operator/(int scalar) {
-    pixelValueCheck(R / scalar, G / scalar, B / scalar);
-    return *this;
-}
-
-Pixel& Pixel::operator=(int scalar){
-    pixelValueCheck(scalar, scalar, scalar);
-    return *this;
-}
-
-Pixel& Pixel::operator+(const Pixel& right){
-    pixelValueCheck(R + right.R, G + right.G, B + right.B);
-    return *this;
-}
-
-Pixel& Pixel::operator%(int scalar){
-    pixelValueCheck(R % scalar, G % scalar, B % scalar);
-    return *this;
 }

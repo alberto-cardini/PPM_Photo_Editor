@@ -17,24 +17,9 @@ public:
     Pixel() = default;
     Pixel(const Pixel& src) { R = src.R; G = src.G; B = src.B; };
     Pixel(int red, int green, int blue);
-    void setPixel(const Pixel& src);
-    void setPixel(int red, int green, int blue);
+
     int  getPixelChannel(PixelChannel channel) const;
 
-    Pixel& operator/(int scalar);
-    Pixel& operator=(int scalar);
-    Pixel& operator=(const Pixel& src) = default;
-
-    Pixel& operator%(int scalar);
-
-    Pixel& operator+(int scalar);
-    Pixel& operator*(int scalar);
-    Pixel& operator-(int scalar);
-
-    Pixel& operator/(const Pixel& right);
-    Pixel& operator+(const Pixel& right);
-    Pixel& operator*(const Pixel& right);
-    Pixel& operator-(const Pixel& right);
 };
 
 
