@@ -34,4 +34,5 @@
 # Clang Format
 .clang-format
 MiniPhotoEditor
-cmake-build-debug/
+cmake-build-debug
+build
