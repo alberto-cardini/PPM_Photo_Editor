@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <memory>
 
 #include "Matrix.hpp"
 
@@ -26,13 +27,13 @@ public:
 
     void                      setHeight(int h) { height = h; }
     void                      setWidth(int w) { width = w; }
-    // Pixel                     getBitmapAverage() const;
 
-    void save();
+    void                      save();
 
 private:
     void                         loadBitmap(std::ifstream& source);
-
+    int                          checkChannelValue(int& value) const;
+    //TODO: "enhance filter" after applying sobel kernel (edge detection)
     std::string                  type;
     std::string                  path;
 
