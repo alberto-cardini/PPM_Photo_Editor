@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(MiniPhotoEditor LANGUAGES CXX)
+project(PPM_Photo_Editor LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../)
@@ -21,13 +21,11 @@ include_directories(test)
 
 set(SOURCE_FILE
         src/Image.cpp
-        src/Pixel.cpp
 )
 
 set(INCLUDE_FILE
         inc/Image.hpp
         inc/Matrix.hpp
-        inc/Pixel.hpp
 )
 
 add_executable(${PROJECT_NAME}
