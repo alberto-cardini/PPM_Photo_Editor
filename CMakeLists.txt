@@ -21,11 +21,16 @@ include_directories(test)
 
 set(SOURCE_FILE
         src/Image.cpp
+        src/EdgeDetection.cpp
+        src/GaussianBlur.cpp
 )
 
 set(INCLUDE_FILE
         inc/Image.hpp
         inc/Matrix.hpp
+        inc/Filter.hpp
+        inc/EdgeDetection.hpp
+        inc/GaussianBlur.hpp
 )
 
 add_executable(${PROJECT_NAME}
