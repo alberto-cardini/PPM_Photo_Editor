@@ -36,17 +36,17 @@ Image::Image(const std::string& input_path, const std::string& path)
             output << width << " " << height << std::endl;
             output << channelRange << std::endl;
 
-            // bitmap = std::make_shared<Matrix<Pixel>>(height, width);
+            // bitmap = std::make_shared<Matrix<Pixel>>(row, columns);
             bitmap_R = std::make_shared<Matrix<int>>(height, width);
             bitmap_G = std::make_shared<Matrix<int>>(height, width);
             bitmap_B = std::make_shared<Matrix<int>>(height, width);
             loadBitmap(input);
-
-            for (int i = 0; i < height * width; ++i) {
+/*
+            for (int i = 0; i < row * columns; ++i) {
                 output << (*bitmap_R)[i] << " ";
                 output << (*bitmap_G)[i] << " ";
                 output << (*bitmap_B)[i] << " " << std::endl;
-            }
+            }*/
             output.close();
         }
         input.close();

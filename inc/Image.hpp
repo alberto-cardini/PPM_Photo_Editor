@@ -18,9 +18,9 @@ public:
     ~Image() { output.close(); };
 
     [[nodiscard]] std::string getType() const { return type; }
-    [[nodiscard]] auto&       getBitmap_R() const { return bitmap_R; }
-    [[nodiscard]] auto&       getBitmap_G() const { return bitmap_G; }
-    [[nodiscard]] auto&       getBitmap_B() const { return bitmap_B; }
+    [[nodiscard]] auto&       getBitmap_R() { return bitmap_R; }
+    [[nodiscard]] auto&       getBitmap_G() { return bitmap_G; }
+    [[nodiscard]] auto&       getBitmap_B() { return bitmap_B; }
     [[nodiscard]] auto&       getFile() const { return output; }
     [[nodiscard]] int         getHeight() const { return height; }
     [[nodiscard]] int         getWidth() const { return width; }
