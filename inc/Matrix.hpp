@@ -7,20 +7,20 @@
 #include <iostream>
 #include <vector>
 
-template <typename T, typename N = double>
+template <typename T, typename N = float >
 class Matrix {
 public:
-    Matrix(int h, int w) : height(h), width(w) {
-        matrix.reserve(height * width);
+    Matrix(int h, int w) : row(h), columns(w) {
+        matrix.reserve(row * columns);
     }
 
-    int   getHeight() const { return height; }
-    int   getWidth() const { return width; }
+    int   getRow() const { return row; }
+    int   getColumns() const { return columns; }
     auto& getMatrix() { return matrix; };
 
     void  insert(const std::vector<T>& valuesArray) {
-        if (valuesArray.size() == height * width)
-            for (int i = 0; i < height * width; ++i) {
+        if (valuesArray.size() == row * columns)
+            for (int i = 0; i < row * columns; ++i) {
                 matrix.push_back(valuesArray[i]);
             }
     }
@@ -35,67 +35,66 @@ public:
 
     Matrix& operator=(const Matrix<T>& right) {
         if (this != &right) {
-            height = right.height;
-            width  = right.width;
+            row    = right.row;
+            columns = right.columns;
             matrix = right.matrix;
         }
         return *this;
     }
 
     Matrix<T> operator+(const Matrix<T>& right) {
-        Matrix<T> result(height, width);
-        for (int i = 0; i < height * width; ++i) {
+        Matrix<T> result(row, columns);
+        for (int i = 0; i < row * columns; ++i) {
             result.matrix.push_back(matrix[i] + right.matrix[i]);
         }
         return result;
     }
 
     Matrix<T> operator-(const Matrix<T>& right) {
-        Matrix<T> result(height, width);
-        for (int i = 0; i < height * width; ++i) {
+        Matrix<T> result(row, columns);
+        for (int i = 0; i < row * columns; ++i) {
             result.matrix.push_back(matrix[i] - right.matrix[i]);
         }
         return result;
     }
 
     Matrix<T> operator*(const Matrix<T>& right) {
-        Matrix<T> result(height, width);
-        for (int i = 0; i < height * width; ++i) {
+        Matrix<T> result(row, columns);
+        for (int i = 0; i < row * columns; ++i) {
             result.matrix.push_back(matrix[i] * right.matrix[i]);
         }
         return result;
     }
 
-    Matrix<T> operator/(const Matrix<T>& right) {
-        Matrix<T> result(height, width);
-        for (int i = 0; i < height * width; ++i) {
-            result.matrix.push_back(matrix[i] / right.matrix[i]);
+    Matrix<T> operator/(const T& right) {
+        Matrix<T> result(row, columns);
+        for (int i = 0; i < row * columns; ++i) {
+            result.matrix.push_back(matrix[i] / right);
         }
         return result;
     }
 
     T arithmeticAvg() {
         T temp = 0;
-        for (int i = 0; i < height * width; ++i) { temp = (temp + matrix[i]); }
-        temp = temp / (height * width);
+        for (int i = 0; i < row * columns; ++i) { temp = (temp + matrix[i]); }
+        temp = temp / (row * columns);
         return temp;
     }
 
     void convolve(Matrix<N>& h) {
-        if (h.getHeight() % 2 == 1 && h.getWidth() % 2 == 1) {
-            int       plus = h.getWidth() - (h.getWidth() / 2 + 1);
-            Matrix<T> convolved_M(height, width);
-            reallocate(plus, arithmeticAvg());
+        if (h.getRow() % 2 == 1 && h.getColumns() % 2 == 1) {
+            int       plus = h.getRow() - (h.getColumns() / 2 + 1);
+            Matrix<T> convolved_M(row, columns);
+            padVector(plus, arithmeticAvg());
             h.flipAxisY();
             h.flipAxisX();
             T temp = 0;
-            for (int i = 0; i < height - (plus * 2); ++i) {
-                for (int j = 0; j < width - (plus * 2); ++j) {
-                    for (int m = 0; m < h.getHeight(); ++m) {
-                        for (int n = 0; n < h.getWidth(); ++n) {
-                            temp =
-                                temp + matrix[height * (i + m) + j + n] *
-                                           h.getMatrix()[h.getHeight() * m + n];
+            for (int i = 0; i < row - (plus * 2); ++i) {
+                for (int j = 0; j < columns - (plus * 2); ++j) {
+                    for (int m = 0; m < h.getRow(); ++m) {
+                        for (int n = 0; n < h.getColumns(); ++n) {
+                            temp += matrix[columns * (i + m) + j + n] *
+                                           h.getMatrix()[h.getColumns() * m + n];
                         }
                     }
                     convolved_M.matrix.push_back(temp);
@@ -107,48 +106,48 @@ public:
     }
 
     void flipAxisX() {
-        Matrix<T> flippedMatrix(height, width);
-        for (int i = height - 1; i >= 0; --i) {
-            for (int j = 0; j < height; ++j) {
-                flippedMatrix.matrix.push_back(matrix[height * i + j]);
+        Matrix<T> flippedMatrix(row, columns);
+        for (int i = row - 1; i >= 0; --i) {
+            for (int j = 0; j < row; ++j) {
+                flippedMatrix.matrix.push_back(matrix[columns * i + j]);
             }
         }
         *this = flippedMatrix;
     }
 
     void flipAxisY() {
-        Matrix<T> flippedMatrix(height, width);
-        for (int i = 0; i < height; ++i) {
-            for (int j = width - 1; j >= 0; --j) {
-                flippedMatrix.matrix.push_back(matrix[height * i + j]);
+        Matrix<T> flippedMatrix(row, columns);
+        for (int i = 0; i < row; ++i) {
+            for (int j = columns - 1; j >= 0; --j) {
+                flippedMatrix.matrix.push_back(matrix[columns * i + j]);
             }
         }
         *this = flippedMatrix;
     }
 
     // Works only with square kernel.
-    void reallocate(int plus, T filler) {
-        int newHeight           = height + plus * 2;
+    void padVector(int plus, T padding) {
+        int newHeight           = row + plus * 2;
         // add the plus * 2 extra lines to the kernel. This is needed to create
         // the extra space for the convolution of the first element, otherwise
         // the index of the h(x - tau) would go out of range
-        int            newWidth = width + plus * 2;  // same with the columns
+        int            newWidth = columns + plus * 2;  // same with the columns
 
         Matrix<T>      newMatrix(newHeight, newWidth);
-        std::vector<T> filledVector;
-        filledVector.reserve(newHeight * newWidth);
+        std::vector<T> paddedVector;
+        paddedVector.reserve(newHeight * newWidth);
 
         for (int i = 0; i < newHeight * newWidth; ++i) {
-            filledVector.push_back(filler);
+            paddedVector.push_back(padding);
         }
 
-        for (int i = plus; i < newHeight - plus; ++i) {
-            for (int j = plus; j < height + plus; ++j) {
-                filledVector[newHeight * i + j] =
-                    matrix[height * (i - plus) + (j - plus)];
+        for (int i = plus; i < row + plus; ++i) {
+            for (int j = plus; j < columns + plus; ++j) {
+                paddedVector[newWidth * i + j] =
+                    matrix[columns * (i - plus) + (j - plus)];
             }
         }
-        newMatrix.insert(filledVector);
+        newMatrix.insert(paddedVector);
         *this = newMatrix;
     };
 
@@ -157,8 +156,8 @@ public:
 private:
 
     std::vector<T> matrix;
-    int            height;
-    int            width;
+    int            row;
+    int            columns;
 };
 
 #endif  // MINIPHOTOEDITOR_MATRIX_HPP
