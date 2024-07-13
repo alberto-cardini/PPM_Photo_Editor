@@ -7,12 +7,10 @@
 #include <iostream>
 #include <vector>
 
-template <typename T, typename N = float >
+template <typename T, typename N = float>
 class Matrix {
 public:
-    Matrix(int h, int w) : row(h), columns(w) {
-        matrix.reserve(row * columns);
-    }
+    Matrix(int h, int w) : row(h), columns(w) { matrix.reserve(row * columns); }
 
     int   getRow() const { return row; }
     int   getColumns() const { return columns; }
@@ -35,43 +33,11 @@ public:
 
     Matrix& operator=(const Matrix<T>& right) {
         if (this != &right) {
-            row    = right.row;
+            row     = right.row;
             columns = right.columns;
-            matrix = right.matrix;
+            matrix  = right.matrix;
         }
         return *this;
-    }
-
-    Matrix<T> operator+(const Matrix<T>& right) {
-        Matrix<T> result(row, columns);
-        for (int i = 0; i < row * columns; ++i) {
-            result.matrix.push_back(matrix[i] + right.matrix[i]);
-        }
-        return result;
-    }
-
-    Matrix<T> operator-(const Matrix<T>& right) {
-        Matrix<T> result(row, columns);
-        for (int i = 0; i < row * columns; ++i) {
-            result.matrix.push_back(matrix[i] - right.matrix[i]);
-        }
-        return result;
-    }
-
-    Matrix<T> operator*(const Matrix<T>& right) {
-        Matrix<T> result(row, columns);
-        for (int i = 0; i < row * columns; ++i) {
-            result.matrix.push_back(matrix[i] * right.matrix[i]);
-        }
-        return result;
-    }
-
-    Matrix<T> operator/(const T& right) {
-        Matrix<T> result(row, columns);
-        for (int i = 0; i < row * columns; ++i) {
-            result.matrix.push_back(matrix[i] / right);
-        }
-        return result;
     }
 
     T arithmeticAvg() {
@@ -83,19 +49,17 @@ public:
 
     void convolve(Matrix<N>& h) {
         if (h.getRow() % 2 == 1 && h.getColumns() % 2 == 1) {
-            int       plus = h.getRow() - (h.getColumns() / 2 + 1);
+            int       plusRow     = h.getRow() / 2;
+            int       plusColumns = h.getColumns() / 2;
             Matrix<T> convolved_M(row, columns);
-            padVector(plus, arithmeticAvg());
+            padVector(plusRow, plusColumns, arithmeticAvg());
             h.flipAxisY();
             h.flipAxisX();
-            T temp = 0;
-            for (int i = 0; i < row - (plus * 2); ++i) {
-                for (int j = 0; j < columns - (plus * 2); ++j) {
-                    for (int m = 0; m < h.getRow(); ++m) {
-                        for (int n = 0; n < h.getColumns(); ++n) {
-                            temp += matrix[columns * (i + m) + j + n] *
-                                           h.getMatrix()[h.getColumns() * m + n];
-                        }
+            float temp = 0;
+            for (int i = 0; i < row - (plusRow * 2); ++i) {
+                for (int j = 0; j < columns - (plusColumns * 2); ++j) {
+                    for (int m = 0; m < h.getRow() * h.getColumns(); ++m) {
+                        temp += matrix[columns * (i + (m % h.getRow())) + j + (m % h.getColumns())] * h.getMatrix()[m];
                     }
                     convolved_M.matrix.push_back(temp);
                     temp = 0;
@@ -108,7 +72,7 @@ public:
     void flipAxisX() {
         Matrix<T> flippedMatrix(row, columns);
         for (int i = row - 1; i >= 0; --i) {
-            for (int j = 0; j < row; ++j) {
+            for (int j = 0; j < columns; ++j) {
                 flippedMatrix.matrix.push_back(matrix[columns * i + j]);
             }
         }
@@ -125,13 +89,13 @@ public:
         *this = flippedMatrix;
     }
 
-    // Works only with square kernel.
-    void padVector(int plus, T padding) {
-        int newHeight           = row + plus * 2;
-        // add the plus * 2 extra lines to the kernel. This is needed to create
-        // the extra space for the convolution of the first element, otherwise
-        // the index of the h(x - tau) would go out of range
-        int            newWidth = columns + plus * 2;  // same with the columns
+    T& operator[](int position) { return matrix.at(position); }
+
+private:
+
+    void padVector(int plusRow, int plusColumns, T padding) {
+        int newHeight = row + plusRow * 2;
+        int newWidth  = columns + plusColumns * 2;
 
         Matrix<T>      newMatrix(newHeight, newWidth);
         std::vector<T> paddedVector;
@@ -141,19 +105,15 @@ public:
             paddedVector.push_back(padding);
         }
 
-        for (int i = plus; i < row + plus; ++i) {
-            for (int j = plus; j < columns + plus; ++j) {
-                paddedVector[newWidth * i + j] =
-                    matrix[columns * (i - plus) + (j - plus)];
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                paddedVector[newWidth * (i + plusRow) + (j + plusColumns)] =
+                    matrix[columns * i + j];
             }
         }
         newMatrix.insert(paddedVector);
         *this = newMatrix;
     };
-
-    T& operator[](int position) { return matrix.at(position); }
-
-private:
 
     std::vector<T> matrix;
     int            row;
