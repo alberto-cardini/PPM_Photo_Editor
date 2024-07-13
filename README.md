@@ -11,11 +11,11 @@ To satisfy these particular requests use an editor like GIMP to export the file 
 The following features will be available with the first release. 
 
 ### Filters
-1. Gaussian Blur: (work in progress).
+1. Gaussian Blur: ✅.
 2. Colour adjustments: (planned).
 
 ### Processing
-1. Edge Detection: (planned).
+1. Edge Detection: (work in progress).
 
 ### Editing  
 1. Crop feature: (planned).
