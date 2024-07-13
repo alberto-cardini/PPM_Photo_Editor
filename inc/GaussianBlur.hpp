@@ -8,18 +8,15 @@
 
 class GaussianBlur : public Filter {
 private:
-    std::unique_ptr<Matrix<float>> kernel;
+
     std::unique_ptr<Matrix<float>> kernelYSection;
     std::unique_ptr<Matrix<float>> kernelXSection;
 
-    int                             sigma;
-    int                             variance;
-    int                             kernelSize;  // square matrix n x n
-    double                          weightSum{0};
+    int                            sigma;
+    int                            variance;
 
 public:
     explicit GaussianBlur(int s);
-    auto& getMatrix() { return kernel; };
     void  apply(Image& img) override;
 };
 
