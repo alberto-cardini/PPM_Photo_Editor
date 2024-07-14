@@ -21,6 +21,11 @@ public:
     [[nodiscard]] auto&       getBitmap_R() { return bitmap_R; }
     [[nodiscard]] auto&       getBitmap_G() { return bitmap_G; }
     [[nodiscard]] auto&       getBitmap_B() { return bitmap_B; }
+
+    [[nodiscard]] auto&       getBitmap_RRAW() { return *bitmap_R; }
+    [[nodiscard]] auto&       getBitmap_GRAW() { return *bitmap_G; }
+    [[nodiscard]] auto&       getBitmap_BRAW() { return *bitmap_B; }
+
     [[nodiscard]] auto&       getFile() const { return output; }
     [[nodiscard]] int         getHeight() const { return height; }
     [[nodiscard]] int         getWidth() const { return width; }
@@ -33,7 +38,7 @@ public:
 private:
     void                         loadBitmap(std::ifstream& source);
     int                          checkChannelValue(int& value) const;
-    //TODO: "enhance filter" after applying sobel kernel (edge detection)
+
     std::string                  type;
     std::string                  path;
 

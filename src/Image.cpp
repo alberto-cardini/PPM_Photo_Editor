@@ -6,7 +6,7 @@
 
 void Image::loadBitmap(std::ifstream& source) {
     int red, green, blue;
-    while (!source.eof()) {
+    for (int i = 0; i < height * width; ++i) {
         source >> red;
         source >> green;
         source >> blue;
@@ -32,21 +32,17 @@ Image::Image(const std::string& input_path, const std::string& path)
 
         output.open(path.c_str());
         if (output.is_open()) {
-            output << type << std::endl;
-            output << width << " " << height << std::endl;
-            output << channelRange << std::endl;
+            std::string chargeData = type + "\n" +
+                                     std::to_string(width) + " " +
+                                     std::to_string(height) + "\n" +
+                                     std::to_string(channelRange) + "\n";
+            output << chargeData;
 
-            // bitmap = std::make_shared<Matrix<Pixel>>(row, columns);
             bitmap_R = std::make_shared<Matrix<int>>(height, width);
             bitmap_G = std::make_shared<Matrix<int>>(height, width);
             bitmap_B = std::make_shared<Matrix<int>>(height, width);
             loadBitmap(input);
-/*
-            for (int i = 0; i < row * columns; ++i) {
-                output << (*bitmap_R)[i] << " ";
-                output << (*bitmap_G)[i] << " ";
-                output << (*bitmap_B)[i] << " " << std::endl;
-            }*/
+
             output.close();
         }
         input.close();
@@ -57,14 +53,17 @@ Image::Image(const std::string& input_path, const std::string& path)
 void Image::save() {
     output.open(path.c_str());
     if (output.is_open()) {
-        output << type << std::endl;
-        output << width << " " << height << std::endl;
-        output << channelRange << std::endl;
+        std::string chargeData = type + "\n" + std::to_string(width) + " " +
+                                 std::to_string(height) + "\n" +
+                                 std::to_string(channelRange) + "\n";
+
         for (int i = 0; i < height * width; ++i) {
-            output << checkChannelValue((*bitmap_R)[i]) << " ";
-            output << checkChannelValue((*bitmap_G)[i]) << " ";
-            output << checkChannelValue((*bitmap_B)[i]) << " " << std::endl;
+            chargeData +=
+                std::to_string(checkChannelValue((*bitmap_R)[i])) + " " +
+                std::to_string(checkChannelValue((*bitmap_G)[i])) + " " +
+                std::to_string(checkChannelValue((*bitmap_B)[i])) + "\n";
         }
+        output << chargeData;
         output.close();
     }
 }
