@@ -11,22 +11,19 @@
 
 #include "Matrix.hpp"
 
-class Image {
+class RGB_image {
 public:
-    Image(const std::string& input_path, const std::string& output_path);
+    RGB_image(const std::string& input_path, const std::string& output_path);
 
-    ~Image() { output.close(); };
+    ~RGB_image() { output.close(); };
 
     [[nodiscard]] std::string getType() const { return type; }
-    [[nodiscard]] auto&       getBitmap_R() { return bitmap_R; }
-    [[nodiscard]] auto&       getBitmap_G() { return bitmap_G; }
-    [[nodiscard]] auto&       getBitmap_B() { return bitmap_B; }
+    [[nodiscard]] auto        getBitmap_R() { return bitmap_R; }
+    [[nodiscard]] auto        getBitmap_G() { return bitmap_G; }
+    [[nodiscard]] auto        getBitmap_B() { return bitmap_B; }
 
-    [[nodiscard]] auto&       getBitmap_RRAW() { return *bitmap_R; }
-    [[nodiscard]] auto&       getBitmap_GRAW() { return *bitmap_G; }
-    [[nodiscard]] auto&       getBitmap_BRAW() { return *bitmap_B; }
-
-    [[nodiscard]] auto&       getFile() const { return output; }
+    [[nodiscard]] auto&       getInputPath() const { return input_path; }
+    [[nodiscard]] auto&       getOutputPath() const { return output_path; }
     [[nodiscard]] int         getHeight() const { return height; }
     [[nodiscard]] int         getWidth() const { return width; }
 
@@ -40,7 +37,8 @@ private:
     int                          checkChannelValue(int& value) const;
 
     std::string                  type;
-    std::string                  path;
+    std::string                  output_path;
+    std::string                  input_path;
 
     std::shared_ptr<Matrix<int>> bitmap_R;
     std::shared_ptr<Matrix<int>> bitmap_G;

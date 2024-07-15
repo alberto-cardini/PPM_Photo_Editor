@@ -2,9 +2,9 @@
 // Created by Alberto Cardini on 12/06/24.
 //
 
-#include "Image.hpp"
+#include "RGB_image.hpp"
 
-void Image::loadBitmap(std::ifstream& source) {
+void RGB_image::loadBitmap(std::ifstream& source) {
     int red, green, blue;
     for (int i = 0; i < height * width; ++i) {
         source >> red;
@@ -20,8 +20,8 @@ void Image::loadBitmap(std::ifstream& source) {
     }
 }
 
-Image::Image(const std::string& input_path, const std::string& path)
-    : path(path) {
+RGB_image::RGB_image(const std::string& input_path, const std::string& path)
+    : input_path(input_path), output_path(path) {
     std::ifstream input;
     input.open(input_path.c_str());
     if (input.is_open()) {
@@ -30,7 +30,7 @@ Image::Image(const std::string& input_path, const std::string& path)
         input >> height;
         input >> channelRange;
 
-        output.open(path.c_str());
+        output.open(output_path.c_str());
         if (output.is_open()) {
             std::string chargeData = type + "\n" +
                                      std::to_string(width) + " " +
@@ -50,8 +50,8 @@ Image::Image(const std::string& input_path, const std::string& path)
         throw std::ifstream::failure("File not found or not readable");
 }
 
-void Image::save() {
-    output.open(path.c_str());
+void RGB_image::save() {
+    output.open(output_path.c_str());
     if (output.is_open()) {
         std::string chargeData = type + "\n" + std::to_string(width) + " " +
                                  std::to_string(height) + "\n" +
@@ -68,7 +68,7 @@ void Image::save() {
     }
 }
 
-int Image::checkChannelValue(int& value) const {
+int RGB_image::checkChannelValue(int& value) const {
     int fixedValue = value;
     if (value <= 255 && value >= 0) fixedValue = value;
     else if (value < 0) {
