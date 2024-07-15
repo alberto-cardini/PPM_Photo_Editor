@@ -40,6 +40,14 @@ public:
         return *this;
     }
 
+    void insertWithRound(Matrix<N>& right) {
+        if (row == right.getRow() && columns == right.getColumns()){
+            for (int i = 0; i < row * columns; ++i) {
+                matrix[i] = right.getMatrix()[i];
+            }
+        }
+    };
+
     T arithmeticAvg() {
         T temp = 0;
         for (int i = 0; i < row * columns; ++i) { temp = (temp + matrix[i]); }
@@ -89,10 +97,6 @@ public:
         *this = flippedMatrix;
     }
 
-    T& operator[](int position) { return matrix.at(position); }
-
-private:
-
     void padVector(int plusRow, int plusColumns, T padding) {
         int newHeight = row + plusRow * 2;
         int newWidth  = columns + plusColumns * 2;
@@ -115,6 +119,9 @@ private:
         *this = newMatrix;
     };
 
+    T& operator[](int position) { return matrix.at(position); }
+
+private:
     std::vector<T> matrix;
     int            row;
     int            columns;
