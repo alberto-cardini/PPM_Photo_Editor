@@ -4,15 +4,16 @@
 
 #ifndef MINIPHOTOEDITOR_FILTER_HPP
 #define MINIPHOTOEDITOR_FILTER_HPP
+#include <cmath>
 #include <iostream>
 #include <memory>
-#include <cmath>
-#include "Image.hpp"
+
+#include "RGB_image.hpp"
 
 class Filter {
 public:
     virtual ~Filter() = default;
-    virtual void apply(Image& img) = 0;
+    virtual void apply(RGB_image& img) = 0;
 };
 
 #endif  // MINIPHOTOEDITOR_FILTER_HPP
