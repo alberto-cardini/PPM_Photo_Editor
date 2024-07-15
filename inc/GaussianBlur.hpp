@@ -17,7 +17,7 @@ private:
 
 public:
     explicit GaussianBlur(int s);
-    void  apply(Image& img) override;
+    void  apply(RGB_image& img) override;
 };
 
 #endif  // PPM_PHOTO_EDITOR_GAUSSIANBLUR_HPP

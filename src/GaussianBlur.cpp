@@ -22,7 +22,7 @@ GaussianBlur::GaussianBlur(int s) : sigma(s) {
 
 }
 
-void GaussianBlur::apply(Image &img) {
+void GaussianBlur::apply(RGB_image &img) {
     img.getBitmap_R()->convolve(*kernelYSection);
     img.getBitmap_G()->convolve(*kernelYSection);
     img.getBitmap_B()->convolve(*kernelYSection);
