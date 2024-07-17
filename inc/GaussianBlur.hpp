@@ -8,7 +8,6 @@
 
 class GaussianBlur : public Filter {
 private:
-
     std::unique_ptr<Matrix<float>> kernelYSection;
     std::unique_ptr<Matrix<float>> kernelXSection;
 
@@ -17,7 +16,8 @@ private:
 
 public:
     explicit GaussianBlur(int s);
-    void  apply(RGB_image& img) override;
+    void apply(RGB_image& img) override;
+    void apply(Gray_Scale_image& img) override;
 };
 
 #endif  // PPM_PHOTO_EDITOR_GAUSSIANBLUR_HPP

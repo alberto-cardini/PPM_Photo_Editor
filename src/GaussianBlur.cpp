@@ -31,3 +31,8 @@ void GaussianBlur::apply(RGB_image &img) {
     img.getBitmap_G()->convolve(*kernelXSection);
     img.getBitmap_B()->convolve(*kernelXSection);
 }
+
+void GaussianBlur::apply(Gray_Scale_image &img) {
+    img.getBitmap()->convolve(*kernelYSection);
+    img.getBitmap()->convolve(*kernelXSection);
+}
