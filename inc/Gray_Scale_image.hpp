@@ -20,9 +20,9 @@ public:
     ~Gray_Scale_image() { output.close(); };
     [[nodiscard]] std::string getType() const { return type; }
 
-    [[nodiscard]] auto        getBitmap() { return bitmap; }
-    [[nodiscard]] auto&       getInputPath() const { return input_path; }
-    [[nodiscard]] auto&       getOutputPath() const { return output_path; }
+    [[nodiscard]] auto        getBitmap(){ return bitmap; }
+    [[nodiscard]] auto&       getInputPath() const{ return input_path; }
+    [[nodiscard]] auto&       getOutputPath() const{ return output_path; }
     [[nodiscard]] int         getHeight() const { return height; }
 
     [[nodiscard]] int         getWidth() const { return width; }

@@ -30,21 +30,11 @@ RGB_image::RGB_image(const std::string& input_path, const std::string& path)
         input >> height;
         input >> channelRange;
 
-        output.open(output_path.c_str());
-        if (output.is_open()) {
-            std::string chargeData = type + "\n" +
-                                     std::to_string(width) + " " +
-                                     std::to_string(height) + "\n" +
-                                     std::to_string(channelRange) + "\n";
-            output << chargeData;
+        bitmap_R = std::make_shared<Matrix<int>>(height, width);
+        bitmap_G = std::make_shared<Matrix<int>>(height, width);
+        bitmap_B = std::make_shared<Matrix<int>>(height, width);
+        loadBitmap(input);
 
-            bitmap_R = std::make_shared<Matrix<int>>(height, width);
-            bitmap_G = std::make_shared<Matrix<int>>(height, width);
-            bitmap_B = std::make_shared<Matrix<int>>(height, width);
-            loadBitmap(input);
-
-            output.close();
-        }
         input.close();
     } else
         throw std::ifstream::failure("File not found or not readable");
@@ -69,7 +59,7 @@ void RGB_image::save() {
 }
 
 int RGB_image::checkChannelValue(int& value) const {
-    int fixedValue = value;
+    int fixedValue;
     if (value <= 255 && value >= 0) fixedValue = value;
     else if (value < 0) {
         value      = 0;

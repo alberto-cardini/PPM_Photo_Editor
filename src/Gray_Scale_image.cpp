@@ -22,8 +22,8 @@ Gray_Scale_image::Gray_Scale_image(RGB_image& src) {
 }
 
 void Gray_Scale_image::loadBitmap(std::ifstream& source) {
+    int pixel = 0;
     if (input_path.find(".pgm") != std::string::npos) {
-        int pixel = 0;
         for (int i = 0; i < height * width; ++i) {
             source >> pixel;
             try {
@@ -34,7 +34,6 @@ void Gray_Scale_image::loadBitmap(std::ifstream& source) {
         }
     } else if (input_path.find(".ppm") != std::string::npos) {
         int red, green, blue;
-        int pixel = 0;
         for (int i = 0; i < height * width; ++i) {
             source >> red;
             source >> green;
@@ -52,6 +51,8 @@ void Gray_Scale_image::loadBitmap(std::ifstream& source) {
                 std::cerr << e.what() << std::endl;
             }
         }
+    } else {
+        throw std::ifstream::failure("File format not supported");
     }
 }
 
@@ -69,18 +70,8 @@ void Gray_Scale_image::initialize() {
         if (input_path.find(".ppm") != std::string::npos && output_path.find(".pgm") != std::string::npos)
             type = "P2";
 
-        output.open(output_path.c_str());
-        if (output.is_open()) {
-            std::string chargeData = type + "\n" + std::to_string(width) + " " +
-                                     std::to_string(height) + "\n" +
-                                     std::to_string(gray_range) + "\n";
-            output << chargeData;
-            bitmap = std::make_shared<Matrix<int>>(height, width);
-            loadBitmap(input);
-
-            output.close();
-        } else
-            throw std::ifstream::failure("File not found or not readable");
+        bitmap = std::make_shared<Matrix<int>>(height, width);
+        loadBitmap(input);
     }
 }
 
