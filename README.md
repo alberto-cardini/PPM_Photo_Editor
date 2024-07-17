@@ -7,18 +7,13 @@ When choosing the input image be sure to use images that are in PPM or PGM forma
 
 To satisfy these particular requests use an editor like GIMP to export the file in the right format, then open the .ppm/.pgm file in a text editor and delete the line that GIMP included in exported files. Now you are good to go.
 
-## Future Release 1.0
-The following features will be available with the first release. 
+## Right now you can use:
 
-### Filters
-1. Gaussian Blur: ✅.
-2. Colour adjustments: (planned).
+### Gaussian Blur:
+The intensity of the blur can be regulated through the σ value given as a parameter during the constructor call. The σ given in input is the standard deviation of the Gaussian that characterizes the filter itself. the higher the value the more intense the blurring. Following the result with σ = 2, σ = 3, σ = 7 and σ = 14. (images will come)
 
-### Processing
-1. Edge Detection: (work in progress).
-
-### Editing  
-1. Crop feature: (planned).
+### Edge Detection:
+This filter is base on the famous and used Canny Edge Detection algorithm. Through the interpretation and manipulation of the image's gradient the algorithm is able to find the edges of the objects in the image. The implementation is based on the documentation that you can find at the following wikipedia link (https://en.wikipedia.org/wiki/Canny_edge_detector). (images will come)
 
 ## Sources
-A big part of the math applied in the processing of the images loaded is based on the lectures of the Foundamental Course on Computer Vision of the Columbia University (https://fpcv.cs.columbia.edu/Monographs).
+A big part of the math applied in the implementation of the image processing features is based on the lectures of the First Principles of Computer Vision course of the Columbia University (https://fpcv.cs.columbia.edu/Monographs) and on the related stuff that you can find on wikipedia.
