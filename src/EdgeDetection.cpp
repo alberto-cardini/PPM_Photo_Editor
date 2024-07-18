@@ -181,7 +181,7 @@ void EdgeDetection::apply(Gray_Scale_image& img) {
     // compute gradient direction angle
     calc_gradient_direction(*img.getBitmap());
 
-    //lower_bound_cut_off_suppression();
+    lower_bound_cut_off_suppression();
 
     lower_thresholding(30);
 
