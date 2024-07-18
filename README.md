@@ -45,11 +45,11 @@ In brief:
 Following the output of every step:
 
 <p align="center" >
-    <img alt = "Noise Reduction" width = "190" src="assets/Edge1.png">
-    <img alt = "Gradient Calculation" width = "190" src="assets/Edge2.png">
-    <img alt = "Non-Maximum Suppression" width = "190" src="assets/Edge3.png">
-    <img alt = "Double Thresholding" width = "190" src="assets/Edge4.png">
-    <img alt = "Edge Tracking by Hysteresis" width = "190" src="assets/Edge5.png">
+    <img alt = "Noise Reduction" width = "185" src="assets/Edge1.png">
+    <img alt = "Gradient Calculation" width = "185" src="assets/Edge2.png">
+    <img alt = "Non-Maximum Suppression" width = "185" src="assets/Edge3.png">
+    <img alt = "Double Thresholding" width = "185" src="assets/Edge4.png">
+    <img alt = "Edge Tracking by Hysteresis" width = "185" src="assets/Edge5.png">
 </p>
 
 ### Conversion From RGB to Gray Scale (from .ppm to .pgm)
