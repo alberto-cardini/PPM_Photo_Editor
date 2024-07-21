@@ -36,8 +36,9 @@ RGB_image::RGB_image(const std::string& input_path, const std::string& path)
         loadBitmap(input);
 
         input.close();
-    } else
+    } else {
         throw std::ifstream::failure("File not found or not readable");
+    }
 }
 
 void RGB_image::save() {

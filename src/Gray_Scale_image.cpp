@@ -92,7 +92,7 @@ void Gray_Scale_image::save() {
 }
 
 int Gray_Scale_image::checkChannelValue(int& value) const {
-    int fixedValue = value;
+    int fixedValue;
     if (value <= 255 && value >= 0) fixedValue = value;
     else if (value < 0) {
         value      = 0;

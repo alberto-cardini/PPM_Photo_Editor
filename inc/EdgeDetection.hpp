@@ -14,8 +14,11 @@ private:
     void calc_gradient_magnitude(Matrix<int>& bitmap);
     void calc_gradient_direction(Matrix<int>& bitmap);
     void lower_bound_cut_off_suppression();
-    void lower_thresholding(float low_threshold) const;
-    void edge_tracking_by_hysteresis(float high_threshold);
+    void lower_thresholding() const;
+    void edge_tracking_by_hysteresis() const;
+
+    float high_threshold;
+    float low_threshold;
 
     std::unique_ptr<Matrix<float>> sobel_Y_1;
     std::unique_ptr<Matrix<float>> sobel_Y_2;
@@ -27,7 +30,7 @@ private:
     std::unique_ptr<Matrix<int>> gradient_direction;
 
 public:
-    EdgeDetection();
+    EdgeDetection(float h, float l);
     void apply(Gray_Scale_image& img) override;
     void apply(RGB_image& img) override;
 };

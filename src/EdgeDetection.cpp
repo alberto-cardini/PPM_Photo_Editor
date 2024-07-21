@@ -3,7 +3,7 @@
 //
 
 #include "EdgeDetection.hpp"
-EdgeDetection::EdgeDetection() {
+EdgeDetection::EdgeDetection(float h, float l) : high_threshold(h), low_threshold(l) {
     sobel_X_1                          = std::make_unique<Matrix<float>>(3, 1);
     sobel_X_2                          = std::make_unique<Matrix<float>>(1, 3);
 
@@ -130,14 +130,14 @@ void EdgeDetection::lower_bound_cut_off_suppression() {
     }
 }
 
-void EdgeDetection::lower_thresholding(float low_threshold) const{
+void EdgeDetection::lower_thresholding() const{
     for (int i = 0; i < gradient_magnitude->getRow() * gradient_magnitude->getColumns(); ++i) {
         if ((*gradient_magnitude)[i] < low_threshold)
             gradient_magnitude->getMatrix()[i] = 0;
     }
 }
 
-void EdgeDetection::edge_tracking_by_hysteresis(float high_threshold) {
+void EdgeDetection::edge_tracking_by_hysteresis() const {
     int row = gradient_magnitude->getRow();
     int columns = gradient_magnitude->getColumns();
     auto pad_gradient = std::make_unique<Matrix<float>>(row, columns);
@@ -183,14 +183,14 @@ void EdgeDetection::apply(Gray_Scale_image& img) {
 
     lower_bound_cut_off_suppression();
 
-    lower_thresholding(30);
+    lower_thresholding();
 
     // now the thinned gradient_magnitude bitmap is left with only the pixels
     // that are considered weak or strong edge. In the last step Edge tracking
     // by hysteresis will be applied to leave only the weak edges that are
     // connected to strong edges
 
-    edge_tracking_by_hysteresis(70);
+    edge_tracking_by_hysteresis();
 
     img.getBitmap()->insertWithRound(*gradient_magnitude);
 }
