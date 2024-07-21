@@ -20,8 +20,8 @@ In practice, Gaussian blur calculates a weighted average of the pixel values aro
 the original pixel value with this weighted average. This process smooths out the intensity variations between neighboring 
 pixels, making the overall image smoother and less detailed.
 The intensity of the blur can be regulated through the σ value given as a parameter during the constructor call, where σ 
-is the standard deviation, which determines the spread of the Gaussian distribution. The higher the value the
-more intense the blurring. Following the result with σ = 0, σ = 3, σ = 7 and σ = 14. (images will come)
+is the standard deviation, which determines the spread of the Gaussian distribution. The higher the value the more intense 
+the blurring. Following the result with σ = 0, σ = 3, σ = 7 and σ = 14.
 
 <p align="center" >
     <img alt = "Sunflower Blur 0" width = "190" src="assets/BlurSigma0.png">
@@ -45,11 +45,11 @@ In brief:
 Following the output of every step:
 
 <p align="center" >
-    <img alt = "Noise Reduction" width = "180" src="assets/Edge1.png">
-    <img alt = "Gradient Calculation" width = "180" src="assets/Edge2.png">
-    <img alt = "Non-Maximum Suppression" width = "180" src="assets/Edge3.png">
-    <img alt = "Double Thresholding" width = "185" src="assets/Edge4.png">
-    <img alt = "Edge Tracking by Hysteresis" width = "180" src="assets/Edge5.png">
+    <img alt = "Noise Reduction" width = "190" src="assets/Edge1.png">
+    <img alt = "Gradient Calculation" width = "190" src="assets/Edge2.png">
+    <img alt = "Non-Maximum Suppression" width = "190" src="assets/Edge3.png">
+    <img alt = "Double Thresholding" width = "190" src="assets/Edge4.png">
+    <img alt = "Edge Tracking by Hysteresis" width = "190" src="assets/Edge5.png">
 </p>
 
 ### Conversion From RGB to Gray Scale (from .ppm to .pgm)
