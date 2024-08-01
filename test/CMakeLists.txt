@@ -17,6 +17,8 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 set(SOURCE_FILE
+        run_all_test.cpp
+        RGB_Image_Test.cpp
 )
 add_executable(run_test ${SOURCE_FILE})
 
