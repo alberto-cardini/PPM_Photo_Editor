@@ -25,12 +25,6 @@ set(INCLUDE_FILE
         inc/Image.hpp
 )
 
-add_executable(${PROJECT_NAME}  main.cpp )
-add_library(core ${SOURCE_FILE} ${INCLUDE_FILE})
-
-target_link_libraries(${PROJECT_NAME}
-        PRIVATE core
-)
-
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp)
+add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCE_FILE})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}_lib)

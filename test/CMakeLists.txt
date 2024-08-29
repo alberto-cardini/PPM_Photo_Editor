@@ -18,12 +18,10 @@ include(GoogleTest)
 
 set(SOURCE_FILE
         run_all_test.cpp
-        RGB_Image_Test.cpp
+        Image_Test.cpp
+        EdgeDetection_Test.cpp
+        GaussianBlur_Test.cpp
 )
-add_executable(run_test ${SOURCE_FILE})
+add_executable(run_all_test ${SOURCE_FILE})
 
-target_link_libraries(run_test
-        PRIVATE core
-        PRIVATE gtest_main
-)
-gtest_discover_tests(run_test)
+target_link_libraries(run_all_test gtest_main ${CMAKE_PROJECT_NAME}_lib)
