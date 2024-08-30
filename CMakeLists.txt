@@ -12,17 +12,19 @@ include_directories(src)
 add_subdirectory(test)
 
 set(SOURCE_FILE
+        src/RGB_image.cpp
         src/EdgeDetection.cpp
         src/GaussianBlur.cpp
-        src/Image.cpp
+        src/Gray_Scale_image.cpp
 )
 
 set(INCLUDE_FILE
+        inc/RGB_image.hpp
         inc/Matrix.hpp
         inc/Filter.hpp
         inc/EdgeDetection.hpp
         inc/GaussianBlur.hpp
-        inc/Image.hpp
+        inc/Gray_Scale_image.hpp
 )
 
 add_executable(${CMAKE_PROJECT_NAME} main.cpp)
