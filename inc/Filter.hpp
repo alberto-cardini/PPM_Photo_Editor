@@ -8,14 +8,12 @@
 #include <iostream>
 #include <memory>
 
-#include "Gray_Scale_image.hpp"
-#include "RGB_image.hpp"
+#include "Image.hpp"
 
 class Filter {
 public:
     virtual ~Filter() = default;
-    virtual void apply(RGB_image& img) = 0;
-    virtual void apply(Gray_Scale_image& img) = 0;
+    virtual void apply(Image& img) = 0;
 };
 
 #endif  // MINIPHOTOEDITOR_FILTER_HPP
