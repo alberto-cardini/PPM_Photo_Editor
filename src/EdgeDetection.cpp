@@ -54,8 +54,8 @@ void EdgeDetection::calc_gradient_direction(Matrix<int>& bitmap) {
         std::make_unique<Matrix<float>>(bitmap.getRow(), bitmap.getColumns());
 
     for (int i = 0; i < bitmap.getRow() * bitmap.getColumns(); ++i) {
-        gradient_X->insert(bitmap.getMatrix()[i]);
-        gradient_Y->insert(bitmap.getMatrix()[i]);
+        gradient_X->getMatrix()[i] = bitmap.getMatrix()[i];
+        gradient_Y->getMatrix()[i] = bitmap.getMatrix()[i];
     }
 
     // finding the gradient for the x direction
@@ -66,20 +66,18 @@ void EdgeDetection::calc_gradient_direction(Matrix<int>& bitmap) {
     gradient_Y->convolve(*sobel_Y_1);
     gradient_Y->convolve(*sobel_Y_2);
 
-    int theta;
+    float theta;
     for (int i = 0; i < bitmap.getRow() * bitmap.getColumns(); ++i) {
-        theta = round(atan2((gradient_Y->getMatrix())[i], (gradient_X->getMatrix())[i]) * 180 / M_PI);
+        theta = atan2((gradient_Y->getMatrix())[i], (gradient_X->getMatrix())[i]) * 180 / M_PI;
         if (theta >= 0 && theta <= 22.5)
             gradient_direction->insert(0);
-        else if (theta >= 22.5 && theta <= 67.5)
+        else if (theta >= 22.5 && theta <= 67,5)
             gradient_direction->insert(45);
-        else if (theta > 67.5 && theta <= 112.5)
+        else if (theta > 67,5 && theta <= 112,5)
             gradient_direction->insert(90);
-        else if (theta > 112.5 && theta <= 157.5)
+        else if (theta > 112,5 && theta <= 157.5)
             gradient_direction->insert(135);
         else if (theta > 157.5 && theta <= 180)
-            gradient_direction->insert(0);
-        else
             gradient_direction->insert(0);
     }
 }
@@ -88,6 +86,7 @@ void EdgeDetection::lower_bound_cut_off_suppression() {
     auto calculated_G = std::make_unique<Matrix<float>>(gradient_magnitude->getRow(), gradient_magnitude->getColumns());
     *calculated_G = *gradient_magnitude;
 
+    int row = gradient_magnitude->getRow();
     int columns = gradient_magnitude->getColumns();
 
     int plusRow = 1;
@@ -170,19 +169,17 @@ void EdgeDetection::edge_tracking_by_hysteresis() const {
     }
 }
 
-void EdgeDetection::apply(Image& img) {
+void EdgeDetection::apply(Gray_Scale_image& img) {
 
     // smooth the image with a gaussian filter to reduce noise
     GaussianBlur blurringFilter(2);
     blurringFilter.apply(img);
 
-    auto Gray_Scale_Bitmap = img.getGrayScaleBitmap();
-
     // compute the gradient magnitude
-    calc_gradient_magnitude(*Gray_Scale_Bitmap);
+    calc_gradient_magnitude(*img.getBitmap());
 
     // compute gradient direction angle
-    calc_gradient_direction(*Gray_Scale_Bitmap);
+    calc_gradient_direction(*img.getBitmap());
 
     lower_bound_cut_off_suppression();
 
@@ -195,7 +192,19 @@ void EdgeDetection::apply(Image& img) {
 
     edge_tracking_by_hysteresis();
 
-    img.getBitmap_R()->insertWithRound(*gradient_magnitude);
-    img.getBitmap_G()->insertWithRound(*gradient_magnitude);
-    img.getBitmap_B()->insertWithRound(*gradient_magnitude);
+    img.getBitmap()->insertWithRound(*gradient_magnitude);
+}
+
+void EdgeDetection::apply(RGB_image& img) {
+    auto gray_scale = std::make_unique<Gray_Scale_image>(img);
+    apply(*gray_scale);
+    gray_scale->save();
+
+    for (int i = 0; i < img.getHeight() * img.getWidth(); ++i) {
+        if ((*gray_scale->getBitmap())[i] >= 10 ) {
+            img.getBitmap_R()->getMatrix()[i] = 255;
+            img.getBitmap_G()->getMatrix()[i] = 0;
+            img.getBitmap_B()->getMatrix()[i] = 0;
+        }
+    }
 }

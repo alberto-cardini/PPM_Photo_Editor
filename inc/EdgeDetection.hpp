@@ -7,7 +7,7 @@
 #include <memory>
 #include "Filter.hpp"
 #include "GaussianBlur.hpp"
-#include "Image.hpp"
+#include "Gray_Scale_image.hpp"
 class EdgeDetection : public Filter{
 private:
 
@@ -31,7 +31,8 @@ private:
 
 public:
     EdgeDetection(float h, float l);
-    void apply(Image& img) override;
+    void apply(Gray_Scale_image& img) override;
+    void apply(RGB_image& img) override;
 };
 
 #endif  // PPM_PHOTO_EDITOR_EDGEDETECTION_HPP
