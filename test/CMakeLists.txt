@@ -21,6 +21,7 @@ set(SOURCE_FILE
         Image_Test.cpp
         EdgeDetection_Test.cpp
         GaussianBlur_Test.cpp
+        Matrix_Test.cpp
 )
 add_executable(run_all_test ${SOURCE_FILE})
 
