@@ -18,6 +18,7 @@ public:
     ~Image() { output.close(); };
 
     [[nodiscard]] std::string    getType() const { return type; }
+    [[nodiscard]] int            getRange() const { return channelRange; }
     [[nodiscard]] auto           getBitmap_R() { return bitmap_R; }
     [[nodiscard]] auto           getBitmap_G() { return bitmap_G; }
     [[nodiscard]] auto           getBitmap_B() { return bitmap_B; }
@@ -27,11 +28,11 @@ public:
 
     void                         save(const std::string& path);
     void                         saveGrayScale(const std::string& new_path);
+    static int                   checkChannelValue(int& value);
     std::unique_ptr<Matrix<int>> getGrayScaleBitmap();
 
 private:
     void                         loadBitmap(std::ifstream& source);
-    int                          checkChannelValue(int& value) const;
 
     std::string                  type;
 

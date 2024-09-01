@@ -119,7 +119,7 @@ void Image::save(const std::string& path) {
     }
 }
 
-int Image::checkChannelValue(int& value) const {
+int Image::checkChannelValue(int& value) {
     int fixedValue;
     if (value <= 255 && value >= 0) fixedValue = value;
     else if (value < 0) {
@@ -131,4 +131,5 @@ int Image::checkChannelValue(int& value) const {
     }
     return fixedValue;
 }
+
 
