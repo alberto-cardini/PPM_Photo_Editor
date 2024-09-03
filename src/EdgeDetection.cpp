@@ -158,7 +158,8 @@ void EdgeDetection::edge_tracking_by_hysteresis() const {
                     (*pad_gradient)[pad_gradient->getColumns() * (i - 1) + j + 1] > high_threshold ||
                     (*pad_gradient)[pad_gradient->getColumns() * (i + 1) + j - 1] > high_threshold ||
                     (*pad_gradient)[pad_gradient->getColumns() * (i - 1) + j - 1] > high_threshold ||
-                    (*pad_gradient)[pad_gradient->getColumns() * (i + 1) + j + 1] > high_threshold) {
+                    (*pad_gradient)[pad_gradient->getColumns() * (i + 1) + j + 1] > high_threshold)
+                {
                     (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = (*pad_gradient)[pad_gradient->getColumns() * i + j];
                 } else {
                     (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = 0;

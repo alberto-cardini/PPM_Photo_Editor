@@ -9,7 +9,7 @@
 #include "GaussianBlur.hpp"
 #include "Image.hpp"
 class EdgeDetection : public Filter{
-private:
+protected:
 
     void calc_gradient_magnitude(Matrix<int>& bitmap);
     void calc_gradient_direction(Matrix<int>& bitmap);
