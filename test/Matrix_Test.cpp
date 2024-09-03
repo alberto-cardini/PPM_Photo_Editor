@@ -6,9 +6,10 @@
 
 TEST(Matrix_Test, constructor) {
     Matrix<int> test(100,100);
-    ASSERT_EQ(test.getRow(), 100);
-    ASSERT_EQ(test.getColumns(), 100);
-    ASSERT_EQ(test.getRow() * test.getColumns(), test.getMatrix().capacity());
+    ASSERT_EQ(test.get_row(), 100);
+    ASSERT_EQ(test.get_columns(), 100);
+    ASSERT_EQ(test.get_row() * test.get_columns(),
+              test.get_matrix().capacity());
 }
 
 TEST(Matrix_Test, insert) {
@@ -17,8 +18,8 @@ TEST(Matrix_Test, insert) {
     for (int i = 0; i < big_number; ++i) {
         test.insert(i);
     }
-    ASSERT_EQ(test.getMatrix().size(), big_number);
-    ASSERT_NE(test.getMatrix().size(), 0);
+    ASSERT_EQ(test.get_matrix().size(), big_number);
+    ASSERT_NE(test.get_matrix().size(), 0);
 
     for (int i = 0; i < big_number; ++i) {
         ASSERT_EQ(test[i], i);
@@ -29,9 +30,9 @@ TEST(Matrix_Test, EQ_operator) {
     Matrix<int> new_matrix(20,20);
     Matrix<int> old_matrix(100,100);
     old_matrix = new_matrix;
-    ASSERT_EQ(old_matrix.getColumns(), new_matrix.getColumns());
-    ASSERT_EQ(old_matrix.getRow(), new_matrix.getRow());
-    ASSERT_EQ(old_matrix.getMatrix(), new_matrix.getMatrix());
+    ASSERT_EQ(old_matrix.get_columns(), new_matrix.get_columns());
+    ASSERT_EQ(old_matrix.get_row(), new_matrix.get_row());
+    ASSERT_EQ(old_matrix.get_matrix(), new_matrix.get_matrix());
     ASSERT_NE(&old_matrix, &new_matrix);
 }
 
@@ -45,11 +46,11 @@ TEST(Matrix_Test, flipAxisY) {
         ASSERT_EQ(test[i], i + 1);
     }
 
-    test.flipAxisY();
+    test.flip_axis_Y();
     std::vector<int> values_flipped = {3,2,1,
                                        6,5,4,
                                        9,8,7};
-    ASSERT_EQ(test.getMatrix(), values_flipped);
+    ASSERT_EQ(test.get_matrix(), values_flipped);
 }
 
 TEST(Matrix_Test, flipAxisX) {
@@ -58,11 +59,11 @@ TEST(Matrix_Test, flipAxisX) {
                                4,5,6,
                                7,8,9};
     test.insert(values);
-    test.flipAxisX();
+    test.flip_axis_X();
     std::vector<int> values_flipped = {7,8,9,
                                        4,5,6,
                                        1,2,3};
-    ASSERT_EQ(test.getMatrix(), values_flipped);
+    ASSERT_EQ(test.get_matrix(), values_flipped);
 }
 
 TEST(Matrix_Test, convolve) {
@@ -88,7 +89,7 @@ TEST(Matrix_Test, convolve) {
                                       9,9,9,9,9,
                                       9,9,9,9,9};
     result.insert(values_result);
-    ASSERT_EQ(test.getMatrix(), values_result);
+    ASSERT_EQ(test.get_matrix(), values_result);
 }
 
 TEST(Matrix_Test, padding) {
@@ -97,7 +98,7 @@ TEST(Matrix_Test, padding) {
                                9,9,9,
                                9,9,9};
     test.insert(values);
-    test.padVector(1,1,0);
+    test.pad_vector(1, 1, 0);
     Matrix<int> result(5,5);
     std::vector<int> values_result = {0,0,0,0,0,
                                       0,9,9,9,0,
@@ -105,5 +106,5 @@ TEST(Matrix_Test, padding) {
                                       0,9,9,9,0,
                                       0,0,0,0,0};
     result.insert(values_result);
-    ASSERT_EQ(test.getMatrix(), values_result);
+    ASSERT_EQ(test.get_matrix(), values_result);
 }

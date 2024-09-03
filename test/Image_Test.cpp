@@ -27,27 +27,29 @@ TEST(Image_Test, constructor_load) {
     input >> height;
     input >> channelRange;
 
-    ASSERT_EQ(test.getWidth(), width);
-    ASSERT_EQ(test.getHeight(), height);
-    ASSERT_EQ(test.getType(), type);
-    ASSERT_EQ(test.getRange(), channelRange);
+    ASSERT_EQ(test.get_width(), width);
+    ASSERT_EQ(test.get_height(), height);
+    ASSERT_EQ(test.get_type(), type);
+    ASSERT_EQ(test.get_range(), channelRange);
 
     std::vector<int> null_vector = {0};
 
-    ASSERT_NE(test.getBitmap_R()->getMatrix(), null_vector);
-    ASSERT_NE(test.getBitmap_G()->getMatrix(), null_vector);
-    ASSERT_NE(test.getBitmap_B()->getMatrix(), null_vector);
+    ASSERT_NE(test.get_bitmap_R()->get_matrix(), null_vector);
+    ASSERT_NE(test.get_bitmap_G()->get_matrix(), null_vector);
+    ASSERT_NE(test.get_bitmap_B()->get_matrix(), null_vector);
 
     Image test2("../test_asset/sunflower_gray_scale.pgm");
-    for (int i = 0; i < test2.getHeight() * test2.getWidth(); ++i) {
-        ASSERT_EQ(test2.getBitmap_R()->getMatrix()[i], test2.getBitmap_G()->getMatrix()[i]);
-        ASSERT_EQ(test2.getBitmap_B()->getMatrix()[i], test2.getBitmap_G()->getMatrix()[i]);
+    for (int i = 0; i < test2.get_height() * test2.get_width(); ++i) {
+        ASSERT_EQ(test2.get_bitmap_R()->get_matrix()[i],
+                  test2.get_bitmap_G()->get_matrix()[i]);
+        ASSERT_EQ(test2.get_bitmap_B()->get_matrix()[i],
+                  test2.get_bitmap_G()->get_matrix()[i]);
     }
 }
 
 TEST(Image_Test, RGB_to_GS_save_and_get) {
     Image test("../test_asset/test.ppm");
-    test.saveGrayScale("../test_asset/test_GS.pgm");
+    test.save_gray_scale("../test_asset/test_GS.pgm");
 
     std::ifstream test_GS;
     test_GS.open("../test_asset/test_GS.pgm");
@@ -66,11 +68,11 @@ TEST(Image_Test, RGB_to_GS_save_and_get) {
     ASSERT_EQ("P2", type);
     ASSERT_EQ(255, channelRange);
 
-    Matrix<int> gs_bitmap = *test.getGrayScaleBitmap();
+    Matrix<int> gs_bitmap = *test.get_gray_scale_bitmap();
     int current_pixel;
-    for (int i = 0; i < test.getWidth() * test.getHeight(); ++i) {
+    for (int i = 0; i < test.get_width() * test.get_height(); ++i) {
         test_GS >> current_pixel;
-        ASSERT_EQ(gs_bitmap.getMatrix()[i], current_pixel);
+        ASSERT_EQ(gs_bitmap.get_matrix()[i], current_pixel);
     }
 }
 
@@ -79,8 +81,8 @@ TEST(Image_Test, check_channel_value) {
     int pixel;
     for (int i = 0; i < 1000; ++i) {
         pixel = std::rand();
-        ASSERT_GT(Image::checkChannelValue(pixel), 0);
-        ASSERT_LE(Image::checkChannelValue(pixel), 255);
+        ASSERT_GT(Image::check_channel_value(pixel), 0);
+        ASSERT_LE(Image::check_channel_value(pixel), 255);
     }
 }
 
@@ -101,20 +103,20 @@ TEST(Image_Test, save) {
     saved_test >> height;
     saved_test >> channelRange;
 
-    ASSERT_EQ(test.getWidth(), width);
-    ASSERT_EQ(test.getHeight(), height);
-    ASSERT_EQ(test.getType(), type);
-    ASSERT_EQ(test.getRange(), channelRange);
+    ASSERT_EQ(test.get_width(), width);
+    ASSERT_EQ(test.get_height(), height);
+    ASSERT_EQ(test.get_type(), type);
+    ASSERT_EQ(test.get_range(), channelRange);
 
     int R,G,B;
 
-    for (int i = 0; i < test.getHeight() * test.getWidth(); ++i) {
+    for (int i = 0; i < test.get_height() * test.get_width(); ++i) {
         saved_test >> R;
         saved_test >> G;
         saved_test >> B;
 
-        ASSERT_EQ(test.getBitmap_R()->getMatrix()[i], R);
-        ASSERT_EQ(test.getBitmap_G()->getMatrix()[i], G);
-        ASSERT_EQ(test.getBitmap_B()->getMatrix()[i], B);
+        ASSERT_EQ(test.get_bitmap_R()->get_matrix()[i], R);
+        ASSERT_EQ(test.get_bitmap_G()->get_matrix()[i], G);
+        ASSERT_EQ(test.get_bitmap_B()->get_matrix()[i], B);
     }
 }

@@ -20,8 +20,8 @@ set(SOURCE_FILE
 set(INCLUDE_FILE
         inc/Matrix.hpp
         inc/Filter.hpp
-        inc/EdgeDetection.hpp
-        inc/GaussianBlur.hpp
+        inc/Edge_Detection.hpp
+        inc/Gaussian_Blur.hpp
         inc/Image.hpp
 )
 

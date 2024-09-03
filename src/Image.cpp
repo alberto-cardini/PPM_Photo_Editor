@@ -4,16 +4,16 @@
 
 #include "Image.hpp"
 
-void Image::loadBitmap(std::ifstream& source) {
+void Image::load_bitmap(std::ifstream& source) {
     int pixel = 0;
     if (type == "P2") {
         type = "P3";
         for (int i = 0; i < height * width; ++i) {
             source >> pixel;
             try {
-                bitmap_R->insert(checkChannelValue(pixel));
-                bitmap_G->insert(checkChannelValue(pixel));
-                bitmap_B->insert(checkChannelValue(pixel));
+                bitmap_R->insert(check_channel_value(pixel));
+                bitmap_G->insert(check_channel_value(pixel));
+                bitmap_B->insert(check_channel_value(pixel));
             } catch (const std::logic_error& e) {
                 std::cerr << e.what() << std::endl;
             }
@@ -25,9 +25,9 @@ void Image::loadBitmap(std::ifstream& source) {
             source >> green;
             source >> blue;
             try {
-                bitmap_R->insert(checkChannelValue(red));
-                bitmap_G->insert(checkChannelValue(green));
-                bitmap_B->insert(checkChannelValue(blue));
+                bitmap_R->insert(check_channel_value(red));
+                bitmap_G->insert(check_channel_value(green));
+                bitmap_B->insert(check_channel_value(blue));
             } catch (const std::logic_error& e) {
                 std::cerr << e.what() << std::endl;
             }
@@ -42,12 +42,12 @@ Image::Image(const std::string& path) {
         input >> type;
         input >> width;
         input >> height;
-        input >> channelRange;
+        input >> channel_range;
 
         bitmap_R = std::make_shared<Matrix<int>>(height, width);
         bitmap_G = std::make_shared<Matrix<int>>(height, width);
         bitmap_B = std::make_shared<Matrix<int>>(height, width);
-        loadBitmap(input);
+        load_bitmap(input);
 
         input.close();
     } else {
@@ -55,13 +55,13 @@ Image::Image(const std::string& path) {
     }
 }
 
-std::unique_ptr<Matrix<int>> Image::getGrayScaleBitmap() {
+std::unique_ptr<Matrix<int>> Image::get_gray_scale_bitmap() {
     auto bitmap = std::make_unique<Matrix<int>>(height, width);
     for (int i = 0; i < height * width; ++i) {
         try {
             int pixel = R_COEF * (*bitmap_R)[i] + G_COEF * (*bitmap_G)[i] +
                         B_COEF * (*bitmap_B)[i];
-            bitmap->insert(checkChannelValue(pixel));
+            bitmap->insert(check_channel_value(pixel));
         } catch (const std::logic_error& e) {
             std::cerr << e.what() << std::endl;
         }
@@ -69,17 +69,17 @@ std::unique_ptr<Matrix<int>> Image::getGrayScaleBitmap() {
     return bitmap;
 }
 
-void Image::saveGrayScale(const std::string& new_path) {
+void Image::save_gray_scale(const std::string& new_path) {
     Matrix<int> bitmap(height, width);
     if (new_path.find(".pgm") != std::string::npos) {
-        std::ofstream newImage;
+        std::ofstream new_image;
         std::string P2 = "P2";
-        newImage.open(new_path.c_str());
-        if (newImage.is_open()) {
-            std::string chargeData = P2 + "\n" +
+        new_image.open(new_path.c_str());
+        if (new_image.is_open()) {
+            std::string charge_data = P2 + "\n" +
                                      std::to_string(width) + " " +
                                      std::to_string(height) + "\n" +
-                                     std::to_string(channelRange) + "\n";
+                                     std::to_string(channel_range) + "\n";
             for (int i = 0; i < height * width; ++i) {
                 try {
                     // compute a weighted average of the RGB channels because
@@ -89,14 +89,14 @@ void Image::saveGrayScale(const std::string& new_path) {
                     int pixel = R_COEF * (*bitmap_R)[i] +
                                 G_COEF * (*bitmap_G)[i] +
                                 B_COEF * (*bitmap_B)[i];
-                    chargeData +=
-                        std::to_string(checkChannelValue(pixel)) + "\n";
+                    charge_data +=
+                        std::to_string(check_channel_value(pixel)) + "\n";
                 } catch (const std::logic_error& e) {
                     std::cerr << e.what() << std::endl;
                 }
             }
-            newImage << chargeData;
-            newImage.close();
+            new_image << charge_data;
+            new_image.close();
         }
     }
 }
@@ -104,32 +104,32 @@ void Image::saveGrayScale(const std::string& new_path) {
 void Image::save(const std::string& path) {
     output.open(path.c_str());
     if (output.is_open()) {
-        std::string chargeData = type + "\n" + std::to_string(width) + " " +
+        std::string charge_data = type + "\n" + std::to_string(width) + " " +
                                  std::to_string(height) + "\n" +
-                                 std::to_string(channelRange) + "\n";
+                                 std::to_string(channel_range) + "\n";
 
         for (int i = 0; i < height * width; ++i) {
-            chargeData +=
-                std::to_string(checkChannelValue((*bitmap_R)[i])) + " " +
-                std::to_string(checkChannelValue((*bitmap_G)[i])) + " " +
-                std::to_string(checkChannelValue((*bitmap_B)[i])) + "\n";
+            charge_data +=
+                std::to_string(check_channel_value((*bitmap_R)[i])) + " " +
+                std::to_string(check_channel_value((*bitmap_G)[i])) + " " +
+                std::to_string(check_channel_value((*bitmap_B)[i])) + "\n";
         }
-        output << chargeData;
+        output << charge_data;
         output.close();
     }
 }
 
-int Image::checkChannelValue(int& value) {
-    int fixedValue;
-    if (value <= 255 && value >= 0) fixedValue = value;
+int Image::check_channel_value(int& value) {
+    int fixed_value;
+    if (value <= 255 && value >= 0) fixed_value = value;
     else if (value < 0) {
         value      = 0;
-        fixedValue = 0;
+        fixed_value = 0;
     } else {
         value      = 255;
-        fixedValue = 255;
+        fixed_value = 255;
     }
-    return fixedValue;
+    return fixed_value;
 }
 
 

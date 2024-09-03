@@ -1,33 +1,33 @@
 //
 // Created by Alberto Cardini on 11/07/24.
 //
-#include "GaussianBlur.hpp"
+#include "Gaussian_Blur.hpp"
 
-GaussianBlur::GaussianBlur(int s) : sigma(s) {
+Gaussian_Blur::Gaussian_Blur(int s) : sigma(s) {
     variance = pow(sigma, 2);
 
     if (static_cast<int>((2 * M_PI * sigma)) % 2 == 0) {
-        kernelYSection = std::make_unique<Matrix<float>>(2 * M_PI * sigma + 1, 1);
-        kernelXSection = std::make_unique<Matrix<float>>(1,2 * M_PI * sigma + 1);
+        kernel_Y_section = std::make_unique<Matrix<float>>(2 * M_PI * sigma + 1, 1);
+        kernel_X_section = std::make_unique<Matrix<float>>(1,2 * M_PI * sigma + 1);
     }
     else{
-        kernelYSection = std::make_unique<Matrix<float>>(2 * M_PI * sigma,1);
-        kernelXSection = std::make_unique<Matrix<float>>(1,2 * M_PI * sigma);
+        kernel_Y_section = std::make_unique<Matrix<float>>(2 * M_PI * sigma,1);
+        kernel_X_section = std::make_unique<Matrix<float>>(1,2 * M_PI * sigma);
     }
 
-    for (int i = 0; i < kernelYSection->getRow(); ++i) {
-        kernelYSection->insert((1 / (sqrt(2 * M_PI) * sigma)) * exp((pow((-kernelYSection->getRow() / 2) + i, 2)) / (-2 * variance)));
-        kernelXSection->insert((1 / (sqrt(2 * M_PI) * sigma)) * exp((pow((-kernelXSection->getColumns() / 2) + i, 2)) / (-2 * variance)));
+    for (int i = 0; i < kernel_Y_section->get_row(); ++i) {
+        kernel_Y_section->insert((1 / (sqrt(2 * M_PI) * sigma)) * exp((pow((-kernel_Y_section->get_row() / 2) + i, 2)) / (-2 * variance)));
+        kernel_X_section->insert((1 / (sqrt(2 * M_PI) * sigma)) * exp((pow((-kernel_X_section->get_columns() / 2) + i, 2)) / (-2 * variance)));
     }
 
 }
 
-void GaussianBlur::apply(Image& img) {
-    img.getBitmap_R()->convolve(*kernelYSection);
-    img.getBitmap_G()->convolve(*kernelYSection);
-    img.getBitmap_B()->convolve(*kernelYSection);
+void Gaussian_Blur::apply(Image& img) {
+    img.get_bitmap_R()->convolve(*kernel_Y_section);
+    img.get_bitmap_G()->convolve(*kernel_Y_section);
+    img.get_bitmap_B()->convolve(*kernel_Y_section);
 
-    img.getBitmap_R()->convolve(*kernelXSection);
-    img.getBitmap_G()->convolve(*kernelXSection);
-    img.getBitmap_B()->convolve(*kernelXSection);
+    img.get_bitmap_R()->convolve(*kernel_X_section);
+    img.get_bitmap_G()->convolve(*kernel_X_section);
+    img.get_bitmap_B()->convolve(*kernel_X_section);
 }

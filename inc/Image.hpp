@@ -17,22 +17,22 @@ public:
 
     ~Image() { output.close(); };
 
-    [[nodiscard]] std::string    getType() const { return type; }
-    [[nodiscard]] int            getRange() const { return channelRange; }
-    [[nodiscard]] auto           getBitmap_R() { return bitmap_R; }
-    [[nodiscard]] auto           getBitmap_G() { return bitmap_G; }
-    [[nodiscard]] auto           getBitmap_B() { return bitmap_B; }
+    [[nodiscard]] std::string    get_type() const { return type; }
+    [[nodiscard]] int            get_range() const { return channel_range; }
+    [[nodiscard]] auto           get_bitmap_R() { return bitmap_R; }
+    [[nodiscard]] auto           get_bitmap_G() { return bitmap_G; }
+    [[nodiscard]] auto           get_bitmap_B() { return bitmap_B; }
 
-    [[nodiscard]] int            getHeight() const { return height; }
-    [[nodiscard]] int            getWidth() const { return width; }
+    [[nodiscard]] int            get_height() const { return height; }
+    [[nodiscard]] int            get_width() const { return width; }
 
     void                         save(const std::string& path);
-    void                         saveGrayScale(const std::string& new_path);
-    static int                   checkChannelValue(int& value);
-    std::unique_ptr<Matrix<int>> getGrayScaleBitmap();
+    void                         save_gray_scale(const std::string& new_path);
+    static int                   check_channel_value(int& value);
+    std::unique_ptr<Matrix<int>> get_gray_scale_bitmap();
 
 private:
-    void                         loadBitmap(std::ifstream& source);
+    void                         load_bitmap(std::ifstream& source);
 
     std::string                  type;
 
@@ -44,7 +44,7 @@ private:
 
     int                          height{0};
     int                          width{0};
-    int                          channelRange{0};
+    int                          channel_range{0};
 
     const float                  R_COEF = 0.2989;
     const float                  G_COEF = 0.5870;

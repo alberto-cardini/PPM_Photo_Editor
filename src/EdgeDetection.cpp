@@ -2,8 +2,8 @@
 // Created by Alberto Cardini on 11/07/24.
 //
 
-#include "EdgeDetection.hpp"
-EdgeDetection::EdgeDetection(float h, float l) : high_threshold(h), low_threshold(l) {
+#include "Edge_Detection.hpp"
+Edge_Detection::Edge_Detection(float h, float l) : high_threshold(h), low_threshold(l) {
     sobel_X_1                          = std::make_unique<Matrix<float>>(3, 1);
     sobel_X_2                          = std::make_unique<Matrix<float>>(1, 3);
 
@@ -20,16 +20,16 @@ EdgeDetection::EdgeDetection(float h, float l) : high_threshold(h), low_threshol
     sobel_Y_2->insert(sobel_base_down);
 }
 
-void EdgeDetection::calc_gradient_magnitude(Matrix<int>& bitmap) {
-    gradient_magnitude = std::make_unique<Matrix<float>>(bitmap.getRow(), bitmap.getColumns());
+void Edge_Detection::calc_gradient_magnitude(Matrix<int>& bitmap) {
+    gradient_magnitude = std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
     auto gradient_X =
-        std::make_unique<Matrix<float>>(bitmap.getRow(), bitmap.getColumns());
+        std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
     auto gradient_Y =
-        std::make_unique<Matrix<float>>(bitmap.getRow(), bitmap.getColumns());
+        std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
 
-    for (int i = 0; i < bitmap.getRow() * bitmap.getColumns(); ++i) {
-        gradient_X->getMatrix()[i] = bitmap.getMatrix()[i];
-        gradient_Y->getMatrix()[i] = bitmap.getMatrix()[i];
+    for (int i = 0; i < bitmap.get_row() * bitmap.get_columns(); ++i) {
+        gradient_X->get_matrix()[i] = bitmap.get_matrix()[i];
+        gradient_Y->get_matrix()[i] = bitmap.get_matrix()[i];
     }
 
     // finding the gradient for the x direction
@@ -40,22 +40,22 @@ void EdgeDetection::calc_gradient_magnitude(Matrix<int>& bitmap) {
     gradient_Y->convolve(*sobel_Y_1);
     gradient_Y->convolve(*sobel_Y_2);
 
-    for (int i = 0; i < bitmap.getRow() * bitmap.getColumns(); ++i) {
+    for (int i = 0; i < bitmap.get_row() * bitmap.get_columns(); ++i) {
         gradient_magnitude->insert(
-            hypot(gradient_X->getMatrix()[i], gradient_Y->getMatrix()[i]));
+            hypot(gradient_X->get_matrix()[i], gradient_Y->get_matrix()[i]));
     }
 }
 
-void EdgeDetection::calc_gradient_direction(Matrix<int>& bitmap) {
-    gradient_direction = std::make_unique<Matrix<int>>(bitmap.getRow(), bitmap.getColumns());
+void Edge_Detection::calc_gradient_direction(Matrix<int>& bitmap) {
+    gradient_direction = std::make_unique<Matrix<int>>(bitmap.get_row(), bitmap.get_columns());
     auto gradient_X =
-        std::make_unique<Matrix<float>>(bitmap.getRow(), bitmap.getColumns());
+        std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
     auto gradient_Y =
-        std::make_unique<Matrix<float>>(bitmap.getRow(), bitmap.getColumns());
+        std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
 
-    for (int i = 0; i < bitmap.getRow() * bitmap.getColumns(); ++i) {
-        gradient_X->insert(bitmap.getMatrix()[i]);
-        gradient_Y->insert(bitmap.getMatrix()[i]);
+    for (int i = 0; i < bitmap.get_row() * bitmap.get_columns(); ++i) {
+        gradient_X->insert(bitmap.get_matrix()[i]);
+        gradient_Y->insert(bitmap.get_matrix()[i]);
     }
 
     // finding the gradient for the x direction
@@ -67,8 +67,8 @@ void EdgeDetection::calc_gradient_direction(Matrix<int>& bitmap) {
     gradient_Y->convolve(*sobel_Y_2);
 
     int theta;
-    for (int i = 0; i < bitmap.getRow() * bitmap.getColumns(); ++i) {
-        theta = round(atan2((gradient_Y->getMatrix())[i], (gradient_X->getMatrix())[i]) * 180 / M_PI);
+    for (int i = 0; i < bitmap.get_row() * bitmap.get_columns(); ++i) {
+        theta = round(atan2((gradient_Y->get_matrix())[i], (gradient_X->get_matrix())[i]) * 180 / M_PI);
         if (theta >= 0 && theta <= 22.5)
             gradient_direction->insert(0);
         else if (theta >= 22.5 && theta <= 67.5)
@@ -84,106 +84,108 @@ void EdgeDetection::calc_gradient_direction(Matrix<int>& bitmap) {
     }
 }
 
-void EdgeDetection::lower_bound_cut_off_suppression() {
-    auto calculated_G = std::make_unique<Matrix<float>>(gradient_magnitude->getRow(), gradient_magnitude->getColumns());
+void Edge_Detection::lower_bound_cut_off_suppression() {
+    auto calculated_G = std::make_unique<Matrix<float>>(
+        gradient_magnitude->get_row(), gradient_magnitude->get_columns());
     *calculated_G = *gradient_magnitude;
 
-    int columns = gradient_magnitude->getColumns();
+    int columns = gradient_magnitude->get_columns();
 
-    int plusRow = 1;
-    int plusColumns = 1;
-    calculated_G->padVector(plusRow,plusColumns,0);
+    int plus_row    = 1;
+    int plus_columns = 1;
+    calculated_G->pad_vector(plus_row, plus_columns, 0);
 
     // refer to the Moore neighborhood to understand the orientation
-    for (int i = plusRow; i < calculated_G->getRow() - plusRow; ++i) {
-        for (int j = plusColumns; j < calculated_G->getColumns() - plusColumns; ++j) {
-            auto current_value = (*calculated_G)[calculated_G->getColumns() * i + j];
-            switch ((*gradient_direction).getMatrix()[columns * (i - plusRow) + (j - plusColumns)]) {
+    for (int i = plus_row; i < calculated_G->get_row() - plus_row; ++i) {
+        for (int j = plus_columns; j < calculated_G->get_columns() - plus_columns; ++j) {
+            auto current_value = (*calculated_G)[calculated_G->get_columns() * i + j];
+            switch ((*gradient_direction)
+                        .get_matrix()[columns * (i - plus_row) + (j - plus_columns)]) {
                 case 0:    // check EAST and WEST
-                    if (current_value > (*calculated_G)[calculated_G->getColumns() * i + j + 1] && current_value > (*calculated_G)[calculated_G->getColumns() * i + j - 1])
-                        (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = current_value;
+                    if (current_value > (*calculated_G)[calculated_G->get_columns() * i + j + 1] && current_value > (*calculated_G)[calculated_G->get_columns() * i + j - 1])
+                        (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = current_value;
                     else
-                        (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = 0;
+                        (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = 0;
                     break;
                 case 45:   // check NORTH-EAST and SOUTH-WEST
-                    if (current_value > (*calculated_G)[calculated_G->getColumns() * (i - 1) + j + 1] && current_value > (*calculated_G)[calculated_G->getColumns() * (i + 1) + j - 1])
-                        (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = current_value;
+                    if (current_value > (*calculated_G)[calculated_G->get_columns() * (i - 1) + j + 1] && current_value > (*calculated_G)[calculated_G->get_columns() * (i + 1) + j - 1])
+                        (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = current_value;
                     else
-                        (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = 0;
+                        (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = 0;
                     break;
                 case 90:   // check NORTH and SOUTH
-                    if (current_value > (*calculated_G)[calculated_G->getColumns() * (i - 1) + j] && current_value > (*calculated_G)[calculated_G->getColumns() * (i + 1) + j])
-                        (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = current_value;
+                    if (current_value > (*calculated_G)[calculated_G->get_columns() * (i - 1) + j] && current_value > (*calculated_G)[calculated_G->get_columns() * (i + 1) + j])
+                        (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = current_value;
                     else
-                        (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = 0;
+                        (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = 0;
                     break;
                 case 135:  // check NORTH-WEST and SOUTH-EAST
-                    if (current_value > (*calculated_G)[calculated_G->getColumns() * (i - 1) + j - 1] && current_value > (*calculated_G)[calculated_G->getColumns() * (i + 1) + j + 1])
-                        (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = current_value;
+                    if (current_value > (*calculated_G)[calculated_G->get_columns() * (i - 1) + j - 1] && current_value > (*calculated_G)[calculated_G->get_columns() * (i + 1) + j + 1])
+                        (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = current_value;
                     else
-                        (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = 0;
+                        (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = 0;
                     break;
                 default:
-                    (*gradient_magnitude)[columns * ( i - plusRow) + (j - plusColumns)] = current_value;
+                    (*gradient_magnitude)[columns * ( i - plus_row) + (j - plus_columns)] = current_value;
                     break;
             }
         }
     }
 }
 
-void EdgeDetection::lower_thresholding() const{
-    for (int i = 0; i < gradient_magnitude->getRow() * gradient_magnitude->getColumns(); ++i) {
+void Edge_Detection::lower_thresholding() const{
+    for (int i = 0; i < gradient_magnitude->get_row() * gradient_magnitude->get_columns(); ++i) {
         if ((*gradient_magnitude)[i] < low_threshold)
-            gradient_magnitude->getMatrix()[i] = 0;
+            gradient_magnitude->get_matrix()[i] = 0;
     }
 }
 
-void EdgeDetection::edge_tracking_by_hysteresis() const {
-    int row = gradient_magnitude->getRow();
-    int columns = gradient_magnitude->getColumns();
+void Edge_Detection::edge_tracking_by_hysteresis() const {
+    int row = gradient_magnitude->get_row();
+    int columns = gradient_magnitude->get_columns();
     auto pad_gradient = std::make_unique<Matrix<float>>(row, columns);
 
     *pad_gradient = *gradient_magnitude;
-    pad_gradient->padVector(1,1,0);
-    for (int i = 1; i < pad_gradient->getRow() - 1 ; ++i) {
-        for (int j = 1; j < pad_gradient->getColumns() - 1; ++j) {
+    pad_gradient->pad_vector(1, 1, 0);
+    for (int i = 1; i < pad_gradient->get_row() - 1 ; ++i) {
+        for (int j = 1; j < pad_gradient->get_columns() - 1; ++j) {
             // means that we are dealing with a weak-edge pixel
             if ((*gradient_magnitude)[columns * (i - 1) + (j - 1)] < high_threshold) {
                 // check in order:
                 // EAST - WEST - NORTH - SOUTH - NORTH-EAST - SOUTH-WEST - NORTH-WEST - SOUTH-EAST
-                if ((*pad_gradient)[pad_gradient->getColumns() * i + j + 1] > high_threshold ||
-                    (*pad_gradient)[pad_gradient->getColumns() * i + j - 1] > high_threshold ||
-                    (*pad_gradient)[pad_gradient->getColumns() * (i - 1) + j] > high_threshold ||
-                    (*pad_gradient)[pad_gradient->getColumns() * (i + 1) + j] > high_threshold ||
-                    (*pad_gradient)[pad_gradient->getColumns() * (i - 1) + j + 1] > high_threshold ||
-                    (*pad_gradient)[pad_gradient->getColumns() * (i + 1) + j - 1] > high_threshold ||
-                    (*pad_gradient)[pad_gradient->getColumns() * (i - 1) + j - 1] > high_threshold ||
-                    (*pad_gradient)[pad_gradient->getColumns() * (i + 1) + j + 1] > high_threshold)
+                if ((*pad_gradient)[pad_gradient->get_columns() * i + j + 1] > high_threshold ||
+                    (*pad_gradient)[pad_gradient->get_columns() * i + j - 1] > high_threshold ||
+                    (*pad_gradient)[pad_gradient->get_columns() * (i - 1) + j] > high_threshold ||
+                    (*pad_gradient)[pad_gradient->get_columns() * (i + 1) + j] > high_threshold ||
+                    (*pad_gradient)[pad_gradient->get_columns() * (i - 1) + j + 1] > high_threshold ||
+                    (*pad_gradient)[pad_gradient->get_columns() * (i + 1) + j - 1] > high_threshold ||
+                    (*pad_gradient)[pad_gradient->get_columns() * (i - 1) + j - 1] > high_threshold ||
+                    (*pad_gradient)[pad_gradient->get_columns() * (i + 1) + j + 1] > high_threshold)
                 {
-                    (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = (*pad_gradient)[pad_gradient->getColumns() * i + j];
+                    (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = (*pad_gradient)[pad_gradient->get_columns() * i + j];
                 } else {
                     (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = 0;
                 }
             }else{
-                (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = (*pad_gradient)[pad_gradient->getColumns() * i + j];
+                (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = (*pad_gradient)[pad_gradient->get_columns() * i + j];
             }
         }
     }
 }
 
-void EdgeDetection::apply(Image& img) {
+void Edge_Detection::apply(Image& img) {
 
     // smooth the image with a gaussian filter to reduce noise
-    GaussianBlur blurringFilter(2);
-    blurringFilter.apply(img);
+    Gaussian_Blur blurring_filter(2);
+    blurring_filter.apply(img);
 
-    auto Gray_Scale_Bitmap = img.getGrayScaleBitmap();
+    auto gray_scale_bitmap = img.get_gray_scale_bitmap();
 
     // compute the gradient magnitude
-    calc_gradient_magnitude(*Gray_Scale_Bitmap);
+    calc_gradient_magnitude(*gray_scale_bitmap);
 
     // compute gradient direction angle
-    calc_gradient_direction(*Gray_Scale_Bitmap);
+    calc_gradient_direction(*gray_scale_bitmap);
 
     lower_bound_cut_off_suppression();
 
@@ -196,7 +198,7 @@ void EdgeDetection::apply(Image& img) {
 
     edge_tracking_by_hysteresis();
 
-    img.getBitmap_R()->insertWithRound(*gradient_magnitude);
-    img.getBitmap_G()->insertWithRound(*gradient_magnitude);
-    img.getBitmap_B()->insertWithRound(*gradient_magnitude);
+    img.get_bitmap_R()->insert_with_round(*gradient_magnitude);
+    img.get_bitmap_G()->insert_with_round(*gradient_magnitude);
+    img.get_bitmap_B()->insert_with_round(*gradient_magnitude);
 }

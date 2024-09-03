@@ -2,13 +2,14 @@
 // Created by Alberto Cardini on 11/07/24.
 //
 
-#ifndef PPM_PHOTO_EDITOR_EDGEDETECTION_HPP
-#define PPM_PHOTO_EDITOR_EDGEDETECTION_HPP
+#ifndef PPM_PHOTO_EDITOR_EDGE_DETECTION_HPP
+#define PPM_PHOTO_EDITOR_EDGE_DETECTION_HPP
 #include <memory>
+
 #include "Filter.hpp"
-#include "GaussianBlur.hpp"
+#include "Gaussian_Blur.hpp"
 #include "Image.hpp"
-class EdgeDetection : public Filter{
+class Edge_Detection : public Filter{
 protected:
 
     void calc_gradient_magnitude(Matrix<int>& bitmap);
@@ -30,8 +31,8 @@ protected:
     std::unique_ptr<Matrix<int>> gradient_direction;
 
 public:
-    EdgeDetection(float h, float l);
+    Edge_Detection(float h, float l);
     void apply(Image& img) override;
 };
 
-#endif  // PPM_PHOTO_EDITOR_EDGEDETECTION_HPP
+#endif  // PPM_PHOTO_EDITOR_EDGE_DETECTION_HPP
