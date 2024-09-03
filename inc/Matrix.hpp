@@ -41,7 +41,7 @@ public:
     }
 
     void insertWithRound(Matrix<N>& right) {
-        if (row == right.getRow() && columns == right.getColumns()){
+        if (row == right.getRow() && columns == right.getColumns()) {
             for (int i = 0; i < row * columns; ++i) {
                 matrix[i] = right.getMatrix()[i];
             }
@@ -67,7 +67,8 @@ public:
             for (int i = 0; i < row - (plusRow * 2); ++i) {
                 for (int j = 0; j < columns - (plusColumns * 2); ++j) {
                     for (int m = 0; m < h.getRow() * h.getColumns(); ++m) {
-                        temp += matrix[columns * (i + (m % h.getRow())) + j + (m % h.getColumns())] * h.getMatrix()[m];
+                        temp += matrix[columns * (i + (m % h.getRow())) + j +
+                                       (m % h.getColumns())] * h.getMatrix()[m];
                     }
                     convolved_M.matrix.push_back(temp);
                     temp = 0;
@@ -98,8 +99,8 @@ public:
     }
 
     void padVector(int plusRow, int plusColumns, T padding) {
-        int newHeight = row + plusRow * 2;
-        int newWidth  = columns + plusColumns * 2;
+        int            newHeight = row + plusRow * 2;
+        int            newWidth  = columns + plusColumns * 2;
 
         Matrix<T>      newMatrix(newHeight, newWidth);
         std::vector<T> paddedVector;
