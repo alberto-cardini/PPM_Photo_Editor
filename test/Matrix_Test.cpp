@@ -67,44 +67,44 @@ TEST(Matrix_Test, flipAxisX) {
 }
 
 TEST(Matrix_Test, convolve) {
-    Matrix<int> test(5,5);
-    std::vector<int> values = {9,9,9,9,9,
-                               9,9,9,9,9,
-                               9,9,9,9,9,
-                               9,9,9,9,9,
-                               9,9,9,9,9};
+    Matrix<int> test(3,4);
+    std::vector<int> values = {1,2,2,3,
+                               3,7,6,9,
+                               3,2,5,6};
     test.insert(values);
 
     Matrix<float> to_convolve(3,3);
-    std::vector<float> value = {0,0,0,
-                                0,1,0,
-                                0,0,0};
+    std::vector<float> value = {1,2,3,
+                                4,5,6,
+                                7,8,9};
     to_convolve.insert(value);
     test.convolve(to_convolve);
 
-    Matrix<int> result(5,5);
-    std::vector<int> values_result = {9,9,9,9,9,
-                                      9,9,9,9,9,
-                                      9,9,9,9,9,
-                                      9,9,9,9,9,
-                                      9,9,9,9,9};
+    Matrix<int> result(3,4);
+    std::vector<int> values_result = {171, 174, 210, 165,
+                                      141, 183, 198, 219,
+                                      165, 132, 249, 246 };
     result.insert(values_result);
     ASSERT_EQ(test.get_matrix(), values_result);
 }
 
 TEST(Matrix_Test, padding) {
-    Matrix<int> test(3,3);
-    std::vector<int> values = {9,9,9,
-                               9,9,9,
-                               9,9,9};
+    Matrix<int> test(2,7);
+    std::vector<int> values = {9,9,5,7,2,1,8,
+                               9,2,3,9,1,3,7};
     test.insert(values);
-    test.pad_vector(1, 1, 0);
-    Matrix<int> result(5,5);
-    std::vector<int> values_result = {0,0,0,0,0,
-                                      0,9,9,9,0,
-                                      0,9,9,9,0,
-                                      0,9,9,9,0,
-                                      0,0,0,0,0};
+    test.pad_vector(4, 1, 0);
+    Matrix<int> result(10,9);
+    std::vector<int> values_result = {0,0,0,0,0,0,0,0,0,
+                                      0,0,0,0,0,0,0,0,0,
+                                      0,0,0,0,0,0,0,0,0,
+                                      0,0,0,0,0,0,0,0,0,
+                                      0,9,9,5,7,2,1,8,0,
+                                      0,9,2,3,9,1,3,7,0,
+                                      0,0,0,0,0,0,0,0,0,
+                                      0,0,0,0,0,0,0,0,0,
+                                      0,0,0,0,0,0,0,0,0,
+                                      0,0,0,0,0,0,0,0,0};
     result.insert(values_result);
     ASSERT_EQ(test.get_matrix(), values_result);
 }
