@@ -47,3 +47,60 @@ TEST_F(EdgeDetection_Test, hysteresis_test) {
     ASSERT_EQ(gradient_magnitude->get_matrix().size(),
               i1.get_width() * i1.get_height());
 }
+
+TEST_F(EdgeDetection_Test, dummy_img_test) {
+    Matrix<int> dummy(15,14);
+    std::vector<int> values = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 , 0 ,255,255, 0 , 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 ,255,255,255,255, 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 ,255,255, 0 , 0 ,255,255, 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 ,255,255, 0 , 0 , 0 , 0 ,255,255, 0 , 0 , 0 ,
+                                0 , 0 , 0 ,255, 0 , 0 , 0 , 0 , 0 , 0 ,255, 0 , 0 , 0 ,
+                                0 , 0 , 0 ,255,255, 0 , 0 , 0 , 0 ,255,255, 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 ,255,255, 0 , 0 ,255,255, 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 ,255,255,255,255, 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 , 0 ,255,255, 0 , 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
+                                0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 };
+
+    dummy.insert(values);
+
+    calc_gradient_magnitude(dummy);
+    calc_gradient_direction(dummy);
+
+    for (int i = 0; i < 15 * 14; ++i) {
+        ASSERT_LE((*gradient_direction)[i], 180);
+        ASSERT_GE((*gradient_magnitude)[i], 0);
+    }
+
+    lower_bound_cut_off_suppression();
+
+
+    for (int i = 0; i < 15 * 14; ++i) {
+        if ((*gradient_magnitude)[i] == 0 || (*gradient_magnitude)[i] > 1000) {
+            SUCCEED();
+        } else {
+            FAIL();
+        }
+    }
+
+    lower_thresholding();
+
+    for (int i = 0; i < 15 * 14; ++i) {
+        if ((*gradient_magnitude)[i] < low_threshold) {
+            ASSERT_EQ((*gradient_magnitude)[i], 0);
+        }
+    }
+
+    edge_tracking_by_hysteresis();
+
+    for (int i = 0; i < 15 * 14; ++i) {
+        if ((*gradient_magnitude)[i] < high_threshold) {
+            ASSERT_EQ((*gradient_magnitude)[i], 0);
+        }
+    }
+
+}
