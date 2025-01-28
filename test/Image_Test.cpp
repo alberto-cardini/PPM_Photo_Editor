@@ -3,16 +3,6 @@
 //
 #include "Image.hpp"
 #include "gtest/gtest.h"
-/*
-class Image_Test : public testing::Test {
-public:
-    Image_Test() {
-        img_test = std::make_unique<Image>("../input/sunflower.ppm");
-    };
-private:
-    std::unique_ptr<Image> img_test;
-};
-*/
 
 TEST(Image_Test, constructor_load) {
     Image test("../test_asset/test.ppm");

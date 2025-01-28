@@ -22,7 +22,6 @@ FetchContent_MakeAvailable(matplotplusplus)
 
 include_directories(inc)
 include_directories(src)
-add_subdirectory(test)
 
 set(SOURCE_FILE
         src/EdgeDetection.cpp
@@ -42,5 +41,44 @@ add_executable(${PROJECT_NAME} main.cpp
         ${SOURCE_FILE}
         ${INCLUDE_FILE}
 )
+
+add_library(PPM_Editor_lib
+        ${SOURCE_FILE}
+        ${INCLUDE_FILE}
+)
+
+target_link_libraries(PPM_Editor_lib PRIVATE matplot)
+target_include_directories(PPM_Editor_lib PUBLIC inc)
+option(ENABLE_TESTS "Build test suite" ON)
+
+if (ENABLE_TESTS)
+    enable_testing()
+
+    # include GoogleTest
+    include(FetchContent)
+    FetchContent_Declare(
+            googletest
+            GIT_REPOSITORY https://github.com/google/googletest
+            GIT_TAG v1.14.0
+    )
+    FetchContent_MakeAvailable(googletest)
+
+    # Add tests
+    add_executable(project_test
+            test/run_all_test.cpp
+            test/Image_Test.cpp
+            test/EdgeDetection_Test.cpp
+            test/Matrix_Test.cpp
+    )
+
+    # Links the tests to the main lib and to GoogleTest
+    target_link_libraries(project_test PRIVATE PPM_Editor_lib gtest_main)
+
+    # Marks the test with CTest
+    include(GoogleTest)
+    gtest_discover_tests(project_test)
+
+endif()
+
 target_link_libraries(${PROJECT_NAME} PRIVATE matplot)
 install(TARGETS ${PROJECT_NAME})
