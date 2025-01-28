@@ -15,9 +15,9 @@ private:
 */
 
 TEST(Image_Test, constructor_load) {
-    Image         test("../test_asset/test.ppm");
-    std::string   type;
-    int           width, height, channelRange;
+    Image test("../test_asset/test.ppm");
+    std::string type;
+    int width, height, channelRange;
     std::ifstream input;
     input.open("../test_asset/test.ppm");
     ASSERT_TRUE(input.is_open());
@@ -55,8 +55,8 @@ TEST(Image_Test, RGB_to_GS_save_and_get) {
     test_GS.open("../test_asset/test_GS.pgm");
     ASSERT_TRUE(test_GS.is_open());
 
-    std::string   type;
-    int           width, height, channelRange;
+    std::string type;
+    int width, height, channelRange;
 
     test_GS >> type;
     test_GS >> width;
@@ -95,8 +95,8 @@ TEST(Image_Test, save) {
     ASSERT_TRUE(saved_test.is_open());
 
 
-    std::string   type;
-    int           width, height, channelRange;
+    std::string type;
+    int width, height, channelRange;
 
     saved_test >> type;
     saved_test >> width;
@@ -108,7 +108,7 @@ TEST(Image_Test, save) {
     ASSERT_EQ(test.get_type(), type);
     ASSERT_EQ(test.get_range(), channelRange);
 
-    int R,G,B;
+    int R, G, B;
 
     for (int i = 0; i < test.get_height() * test.get_width(); ++i) {
         saved_test >> R;

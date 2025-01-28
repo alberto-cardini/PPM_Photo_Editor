@@ -8,11 +8,10 @@ Gaussian_Blur::Gaussian_Blur(int s) : sigma(s) {
 
     if (static_cast<int>((2 * M_PI * sigma)) % 2 == 0) {
         kernel_Y_section = std::make_unique<Matrix<float>>(2 * M_PI * sigma + 1, 1);
-        kernel_X_section = std::make_unique<Matrix<float>>(1,2 * M_PI * sigma + 1);
-    }
-    else{
-        kernel_Y_section = std::make_unique<Matrix<float>>(2 * M_PI * sigma,1);
-        kernel_X_section = std::make_unique<Matrix<float>>(1,2 * M_PI * sigma);
+        kernel_X_section = std::make_unique<Matrix<float>>(1, 2 * M_PI * sigma + 1);
+    } else {
+        kernel_Y_section = std::make_unique<Matrix<float>>(2 * M_PI * sigma, 1);
+        kernel_X_section = std::make_unique<Matrix<float>>(1, 2 * M_PI * sigma);
     }
 
     for (int i = 0; i < kernel_Y_section->get_row(); ++i) {
@@ -22,7 +21,7 @@ Gaussian_Blur::Gaussian_Blur(int s) : sigma(s) {
 
 }
 
-void Gaussian_Blur::apply(Image& img) {
+void Gaussian_Blur::apply(Image &img) {
     img.get_bitmap_R()->convolve(*kernel_Y_section);
     img.get_bitmap_G()->convolve(*kernel_Y_section);
     img.get_bitmap_B()->convolve(*kernel_Y_section);

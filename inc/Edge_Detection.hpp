@@ -4,18 +4,24 @@
 
 #ifndef PPM_PHOTO_EDITOR_EDGE_DETECTION_HPP
 #define PPM_PHOTO_EDITOR_EDGE_DETECTION_HPP
+
 #include <memory>
 
 #include "Filter.hpp"
 #include "Gaussian_Blur.hpp"
 #include "Image.hpp"
-class Edge_Detection : public Filter{
+
+class Edge_Detection : public Filter {
 protected:
 
-    void calc_gradient_magnitude(Matrix<int>& bitmap);
-    void calc_gradient_direction(Matrix<int>& bitmap);
+    void calc_gradient_magnitude(Matrix<int> &bitmap);
+
+    void calc_gradient_direction(Matrix<int> &bitmap);
+
     void lower_bound_cut_off_suppression();
+
     void lower_thresholding() const;
+
     void edge_tracking_by_hysteresis() const;
 
     float high_threshold;
@@ -32,7 +38,8 @@ protected:
 
 public:
     Edge_Detection(float h, float l);
-    void apply(Image& img) override;
+
+    void apply(Image &img) override;
 };
 
 #endif  // PPM_PHOTO_EDITOR_EDGE_DETECTION_HPP

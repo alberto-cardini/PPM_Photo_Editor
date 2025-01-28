@@ -4,6 +4,7 @@
 
 #ifndef MINIPHOTOEDITOR_FILTER_HPP
 #define MINIPHOTOEDITOR_FILTER_HPP
+
 #include <cmath>
 #include <iostream>
 #include <memory>
@@ -13,7 +14,8 @@
 class Filter {
 public:
     virtual ~Filter() = default;
-    virtual void apply(Image& img) = 0;
+
+    virtual void apply(Image &img) = 0;
 };
 
 #endif  // MINIPHOTOEDITOR_FILTER_HPP
