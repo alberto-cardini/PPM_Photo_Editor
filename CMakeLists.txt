@@ -52,6 +52,7 @@ target_include_directories(PPM_Editor_lib PUBLIC inc)
 option(ENABLE_TESTS "Build test suite" ON)
 
 if (ENABLE_TESTS)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
     enable_testing()
 
     # include GoogleTest
@@ -63,6 +64,7 @@ if (ENABLE_TESTS)
     )
     FetchContent_MakeAvailable(googletest)
 
+    include_directories(${GTEST_INCLUDE_DIRS})
     # Add tests
     add_executable(project_test
             test/run_all_test.cpp
@@ -72,7 +74,7 @@ if (ENABLE_TESTS)
     )
 
     # Links the tests to the main lib and to GoogleTest
-    target_link_libraries(project_test PRIVATE PPM_Editor_lib gtest_main)
+    target_link_libraries(project_test PRIVATE PPM_Editor_lib gtest gtest_main pthread)
 
     # Marks the test with CTest
     include(GoogleTest)

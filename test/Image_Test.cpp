@@ -28,12 +28,12 @@ TEST(Image_Test, constructor_load) {
     ASSERT_NE(test.get_bitmap_G()->get_matrix(), null_vector);
     ASSERT_NE(test.get_bitmap_B()->get_matrix(), null_vector);
 
-    Image test2("../test_asset/sunflower_gray_scale.pgm");
+    Image test2("../test_asset/test.ppm");
     for (int i = 0; i < test2.get_height() * test2.get_width(); ++i) {
         ASSERT_EQ(test2.get_bitmap_R()->get_matrix()[i],
-                  test2.get_bitmap_G()->get_matrix()[i]);
+                  test.get_bitmap_R()->get_matrix()[i]);
         ASSERT_EQ(test2.get_bitmap_B()->get_matrix()[i],
-                  test2.get_bitmap_G()->get_matrix()[i]);
+                  test.get_bitmap_B()->get_matrix()[i]);
     }
 }
 

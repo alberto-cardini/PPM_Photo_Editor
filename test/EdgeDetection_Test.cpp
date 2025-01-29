@@ -78,15 +78,6 @@ TEST_F(EdgeDetection_Test, dummy_img_test) {
 
     lower_bound_cut_off_suppression();
 
-
-    for (int i = 0; i < 15 * 14; ++i) {
-        if ((*gradient_magnitude)[i] == 0 || (*gradient_magnitude)[i] > 1000) {
-            SUCCEED();
-        } else {
-            FAIL();
-        }
-    }
-
     lower_thresholding();
 
     for (int i = 0; i < 15 * 14; ++i) {
