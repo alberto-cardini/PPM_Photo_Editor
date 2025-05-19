@@ -21,12 +21,10 @@ Edge_Detection::Edge_Detection(float h, float l) : high_threshold(h), low_thresh
     sobel_Y_2->insert(sobel_base_down);
 }
 
-void Edge_Detection::calc_gradient_magnitude(Matrix<int> &bitmap) {
+void Edge_Detection::calc_gradient_magnitude(Matrix<uint8_t> &bitmap) {
     gradient_magnitude = std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
-    auto gradient_X =
-            std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
-    auto gradient_Y =
-            std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
+    auto gradient_X = std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
+    auto gradient_Y = std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
 
     for (int i = 0; i < bitmap.get_row() * bitmap.get_columns(); ++i) {
         gradient_X->get_matrix()[i] = bitmap.get_matrix()[i];
@@ -42,17 +40,14 @@ void Edge_Detection::calc_gradient_magnitude(Matrix<int> &bitmap) {
     gradient_Y->convolve(*sobel_Y_2);
 
     for (int i = 0; i < bitmap.get_row() * bitmap.get_columns(); ++i) {
-        gradient_magnitude->insert(
-                hypot(gradient_X->get_matrix()[i], gradient_Y->get_matrix()[i]));
+        gradient_magnitude->insert(hypot(gradient_X->get_matrix()[i], gradient_Y->get_matrix()[i]));
     }
 }
 
-void Edge_Detection::calc_gradient_direction(Matrix<int> &bitmap) {
+void Edge_Detection::calc_gradient_direction(Matrix<uint8_t> &bitmap) {
     gradient_direction = std::make_unique<Matrix<int>>(bitmap.get_row(), bitmap.get_columns());
-    auto gradient_X =
-            std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
-    auto gradient_Y =
-            std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
+    auto gradient_X = std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
+    auto gradient_Y = std::make_unique<Matrix<float>>(bitmap.get_row(), bitmap.get_columns());
 
     for (int i = 0; i < bitmap.get_row() * bitmap.get_columns(); ++i) {
         gradient_X->insert(bitmap.get_matrix()[i]);
@@ -86,12 +81,9 @@ void Edge_Detection::calc_gradient_direction(Matrix<int> &bitmap) {
 }
 
 void Edge_Detection::lower_bound_cut_off_suppression() {
-    auto calculated_G = std::make_unique<Matrix<float>>(
-            gradient_magnitude->get_row(), gradient_magnitude->get_columns());
+    auto calculated_G = std::make_unique<Matrix<float>>(gradient_magnitude->get_row(), gradient_magnitude->get_columns());
     *calculated_G = *gradient_magnitude;
-
     int columns = gradient_magnitude->get_columns();
-
     int plus_row = 1;
     int plus_columns = 1;
     calculated_G->pad_vector(plus_row, plus_columns, 0);
@@ -100,8 +92,7 @@ void Edge_Detection::lower_bound_cut_off_suppression() {
     for (int i = plus_row; i < calculated_G->get_row() - plus_row; ++i) {
         for (int j = plus_columns; j < calculated_G->get_columns() - plus_columns; ++j) {
             auto current_value = (*calculated_G)[calculated_G->get_columns() * i + j];
-            switch ((*gradient_direction)
-                    .get_matrix()[columns * (i - plus_row) + (j - plus_columns)]) {
+            switch ((*gradient_direction).get_matrix()[columns * (i - plus_row) + (j - plus_columns)]) {
                 case 0:    // check EAST and WEST
                     if (current_value > (*calculated_G)[calculated_G->get_columns() * i + j + 1] &&
                         current_value > (*calculated_G)[calculated_G->get_columns() * i + j - 1])
@@ -172,8 +163,7 @@ void Edge_Detection::edge_tracking_by_hysteresis() const {
                     (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = 0;
                 }
             } else {
-                (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = (*pad_gradient)[pad_gradient->get_columns() * i +
-                                                                                     j];
+                (*gradient_magnitude)[columns * (i - 1) + (j - 1)] = (*pad_gradient)[pad_gradient->get_columns()*i+j];
             }
         }
     }

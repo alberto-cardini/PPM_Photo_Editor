@@ -36,18 +36,18 @@ public:
 
     void save_gray_scale(const std::string &new_path);
 
-    static int check_channel_value(int &value);
+    static uint8_t check_channel_value(uint16_t &value);
 
-    std::unique_ptr<Matrix<int>> get_gray_scale_bitmap();
+    std::unique_ptr<Matrix<uint8_t>> get_gray_scale_bitmap();
 
 private:
     void load_bitmap(std::ifstream &source);
 
     std::string type;
 
-    std::shared_ptr<Matrix<int>> bitmap_R;
-    std::shared_ptr<Matrix<int>> bitmap_G;
-    std::shared_ptr<Matrix<int>> bitmap_B;
+    std::shared_ptr<Matrix<uint8_t>> bitmap_R;
+    std::shared_ptr<Matrix<uint8_t>> bitmap_G;
+    std::shared_ptr<Matrix<uint8_t>> bitmap_B;
 
     std::ofstream output;
 

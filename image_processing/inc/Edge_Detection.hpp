@@ -14,9 +14,9 @@
 class Edge_Detection : public Filter {
 protected:
 
-    void calc_gradient_magnitude(Matrix<int> &bitmap);
+    void calc_gradient_magnitude(Matrix<uint8_t> &bitmap);
 
-    void calc_gradient_direction(Matrix<int> &bitmap);
+    void calc_gradient_direction(Matrix<uint8_t> &bitmap);
 
     void lower_bound_cut_off_suppression();
 
