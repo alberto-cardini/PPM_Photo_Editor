@@ -12,8 +12,7 @@
 
 class Image {
 public:
-    Image(const std::string &path);
-
+    explicit Image(const std::string &path);
     ~Image() { output.close(); };
 
     [[nodiscard]] std::string get_type() const { return type; }

@@ -113,6 +113,8 @@ void Image::save(const std::string &path) {
         }
         output << charge_data;
         output.close();
+    } else {
+        std::cout << path << "Image could not be saved" << std::endl;
     }
 }
 

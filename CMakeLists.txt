@@ -36,7 +36,7 @@ set(INCLUDE_FILE
         "image_processing/inc/Edge_Detection.hpp"
         "image_processing/inc/Gaussian_Blur.hpp"
         "image_processing/inc/Image.hpp"
-
+        "image_processing/Inc/CLI.hpp"
 )
 
 add_executable(${PROJECT_NAME} main.cpp
