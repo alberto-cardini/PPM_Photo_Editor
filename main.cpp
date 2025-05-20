@@ -20,8 +20,9 @@ int main() {
     }
 
     std::string payload(base64::encode(bitmap));
-    std::string escape_code = "\x1B_Gf=24,s=" + std::to_string(i1.get_width()) + ",v=" + std::to_string(i1.get_height()) + ";" + payload + "\x1B_G\\";
-    std::string escape_code2 = "\x1b_Gf=100,a=T,t=t;" + payload + "\x1b\\";
-    std::cout << escape_code2 << std::endl;
+    std::string escape_clear = "\033[2J\033[H";
+    std::string escape_code = "\x1B_Gf=24,a=T,s=" + std::to_string(i1.get_width()) + ",v=" + std::to_string(i1.get_height()) + ";" + payload + "\x1B\\";
+    std::cout << escape_clear << std::endl;
+    std::cout << escape_code << std::endl;
     return 0;
 }
