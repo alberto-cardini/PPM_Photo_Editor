@@ -20,21 +20,23 @@ if(NOT matplotplusplus_POPULATED)
 endif()
 FetchContent_MakeAvailable(matplotplusplus)
 
-include_directories(inc)
-include_directories(src)
+include_directories("image_processing/inc")
+include_directories("image_processing/src")
 
 set(SOURCE_FILE
-        src/EdgeDetection.cpp
-        src/GaussianBlur.cpp
-        src/Image.cpp
+        "image_processing/src/EdgeDetection.cpp"
+        "image_processing/src/GaussianBlur.cpp"
+        "image_processing/src/Image.cpp"
+
 )
 
 set(INCLUDE_FILE
-        inc/Matrix.hpp
-        inc/Filter.hpp
-        inc/Edge_Detection.hpp
-        inc/Gaussian_Blur.hpp
-        inc/Image.hpp
+        "image_processing/inc/Matrix.hpp"
+        "image_processing/inc/Filter.hpp"
+        "image_processing/inc/Edge_Detection.hpp"
+        "image_processing/inc/Gaussian_Blur.hpp"
+        "image_processing/inc/Image.hpp"
+
 )
 
 add_executable(${PROJECT_NAME} main.cpp
@@ -47,8 +49,7 @@ add_library(PPM_Editor_lib
         ${INCLUDE_FILE}
 )
 
-target_link_libraries(PPM_Editor_lib PRIVATE matplot)
-target_include_directories(PPM_Editor_lib PUBLIC inc)
+target_include_directories(PPM_Editor_lib PUBLIC "image_processing/inc" "TUI/inc")
 option(ENABLE_TESTS "Build test suite" ON)
 
 if (ENABLE_TESTS)
